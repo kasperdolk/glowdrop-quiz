@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Your Parasite Cleanse Protocol | Serene Herbs Soursop Bitters",
-  description: "Eliminate parasites naturally with our doctor-approved 16-herb formula. Target bloating, brain fog, and stubborn fat at the root cause. 60-day guarantee.",
+  title: "Your Personalized Glow Protocol | GlowDrop Tanning Drops",
+  description: "Get your perfect tan with GlowDrop's drinkable tanning drops. Natural, UV-free glow that builds from within. 30-day money back guarantee.",
 };
 
 export default function OfferLayout({

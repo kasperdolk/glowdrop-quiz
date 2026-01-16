@@ -45,7 +45,7 @@ export const STEP_QUESTIONS = {
   FUTURE_SELF: 'Imagine waking up with [benefits]... How would that make you feel?',
   URGENCY: 'Do you have an important event coming up?',
   COMMITMENT_1: 'Are you ready to transform your health naturally?',
-  COMMITMENT_2: 'Did you know that parasites are a hidden cause of bloating, fatigue, and weight gain?',
+  COMMITMENT_2: 'Are you ready to achieve your perfect year-round glow naturally?',
   OFFER_PAGE: 'Which plan do you prefer?'
 } as const;
 

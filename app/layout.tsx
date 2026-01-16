@@ -21,8 +21,8 @@ const inter = Inter({
 // We'll add it via CSS import in globals.css
 
 export const metadata: Metadata = {
-  title: "Do You Have a Parasite? | Doctor Approved Quiz | Serene Herbs",
-  description: "Bloating, brain fog, and stubborn fat? Take our doctor-approved quiz to discover if parasites are causing your symptoms and get your personalized solution.",
+  title: "What's Your Perfect Tan? | Personalized Glow Quiz | GlowDrop",
+  description: "Tired of streaky self-tanners and UV damage? Take our personalized glow quiz to discover your perfect tanning solution with GlowDrop's drinkable tanning drops.",
 };
 
 export default function RootLayout({

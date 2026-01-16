@@ -1113,7 +1113,7 @@ function OfferLoadingScreen() {
         <div className="w-20 h-20 border-4 rounded-full animate-spin mb-6 mx-auto" style={{ borderColor: '#E0D1D5', borderTopColor: '#562935' }}></div>
         
         <h2 className="text-2xl font-bold mb-4 animate-fade-in" style={headingStyle}>
-          Getting your personalized parasite cleanse protocol + exclusive discount
+          Creating your personalized glow protocol + exclusive offers
         </h2> 
         
         {/* Testimonial Carousel */}
