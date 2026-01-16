@@ -805,7 +805,7 @@ export default function GlowDropQuizApp() {
   // 15. Interstitial 4: How It Works
   if (step === STEPS.INTERSTITIAL_4) {
     const continueButton = (
-      <button onClick={() => handleGlowAssessment(STEPS.RESULTS)} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
+      <button onClick={() => window.location.href = '/offer'} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
         See My Results <ArrowRight size={24} color="#FFFFFF" />
       </button>
     );

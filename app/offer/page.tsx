@@ -573,41 +573,48 @@ export default function OfferPage() {
 
         {/* Color Selection */}
         <div className="mb-8 rounded-xl" style={{ backgroundColor: '#FFFFFF', border: '2px solid #E0D1D5', padding: '24px' }}>
-          <h3 className="text-lg font-bold mb-4" style={headingStyle}>
-            Select Color
+          <h3 className="text-xl font-bold text-center mb-2" style={headingStyle}>
+            Select Your Intensity
           </h3>
+          <p className="text-center text-sm mb-6" style={textStyle}>
+            Choose your desired tan level
+          </p>
 
-          <div className="space-y-3 mb-6">
-            {availableVariants.map((variant) => (
-              <div
-                key={variant.id}
-                onClick={() => {
-                  setSelectedVariant(variant.id.toString());
-                  trackAnswerSelect(25, variant.option1, 'Which color do you prefer?');
-                }}
-                className="relative rounded-lg cursor-pointer transition-all"
-                style={{
-                  backgroundColor: '#fff',
-                  border: selectedVariant === variant.id.toString() ? '2px solid #7A1E3A' : '1.5px solid #E0D1D5',
-                  padding: '16px'
-                }}
-              >
-                <div className="flex items-center gap-4">
-                  <div className="w-6 h-6 rounded-full border-2" style={{
-                    backgroundColor: variant.option1?.toLowerCase() === 'tropical' ? '#FFB347' :
-                                   variant.option1?.toLowerCase() === 'golden' ? '#FFD700' :
-                                   variant.option1?.toLowerCase() === 'bronze' ? '#CD7F32' : '#E0D1D5',
-                    borderColor: selectedVariant === variant.id.toString() ? '#7A1E3A' : '#E0D1D5'
-                  }}></div>
-                  <div className="flex-1">
-                    <h4 className="font-bold text-base" style={textStyle}>{variant.option1}</h4>
-                  </div>
-                  {selectedVariant === variant.id.toString() && (
-                    <Check size={20} color="#7A1E3A" />
-                  )}
+          <div className="grid grid-cols-3 gap-3 mb-6">
+            {availableVariants.map((variant, index) => {
+              const colorMap = {
+                'tropical': { color: '#C8986B', name: 'Glow Up' },
+                'golden': { color: '#B8722C', name: 'Sun Kissed' },
+                'bronze': { color: '#8B4513', name: 'Golden Goddess' }
+              };
+              const colorInfo = colorMap[variant.option1?.toLowerCase() as keyof typeof colorMap] || { color: '#C8986B', name: variant.option1 };
+
+              return (
+                <div
+                  key={variant.id}
+                  onClick={() => {
+                    setSelectedVariant(variant.id.toString());
+                    trackAnswerSelect(25, variant.option1, 'Which intensity do you prefer?');
+                  }}
+                  className="cursor-pointer transition-all"
+                  style={{
+                    border: selectedVariant === variant.id.toString() ? '3px solid #B8722C' : '2px solid #E0D1D5',
+                    borderRadius: '12px',
+                    padding: '16px 12px',
+                    textAlign: 'center' as const,
+                    backgroundColor: selectedVariant === variant.id.toString() ? '#FFF4FD' : '#FFFFFF'
+                  }}
+                >
+                  <div
+                    className="w-full h-4 rounded-full mb-3 mx-auto"
+                    style={{ backgroundColor: colorInfo.color }}
+                  ></div>
+                  <h4 className="font-bold text-sm" style={textStyle}>
+                    {colorInfo.name}
+                  </h4>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
@@ -873,14 +880,16 @@ export default function OfferPage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {[
                     { icon: '✨', title: 'Natural-Looking Tan', desc: 'Builds a gradual, sun-kissed glow that looks like you just got back from two weeks in Bali—not like you wrestled with a bottle of self-tanner' },
-                    { icon: '🛡️', title: '100% UV-Free', desc: 'Get the glow without the guilt. No sun damage, no premature aging, no skin cancer risk. Your dermatologist would actually approve.' },
+                    { icon: <img src="https://assets.replocdn.com/projects/149a24dc-b65a-423d-a51b-0d10fafbd16f/004893f0-5ac7-4cc6-b441-9059376a5294?width=200" alt="UV Protection" className="w-8 h-8" />, title: '100% UV-Free', desc: 'Get the glow without the guilt. No sun damage, no premature aging, no skin cancer risk. Your dermatologist would actually approve.' },
                     { icon: '⏱️', title: '5-Second Routine', desc: 'Drop. Sip. Done. No 30-minute application sessions, no drying time, no contorting to reach your back, no "oops I missed a spot" moments' },
                     { icon: '🧴', title: 'No Mess, No Stains', desc: 'Your white sheets, towels, and clothes are safe. No more bronze handprints on everything you touch. No more "self-tanner smell."' },
                     { icon: '💧', title: 'Hydrating Skincare', desc: 'Hyaluronic Acid and Collagen work alongside the tanning actives. You\'re not just getting bronze—you\'re getting genuinely healthier skin.' },
                     { icon: '🌿', title: 'Clean Formula', desc: '100% Vegan. No artificial dyes. No harsh chemicals. Just vitamins and plant-derived ingredients your body recognizes.' }
                   ].map((benefit, i) => (
                     <div key={i} className="flex items-start gap-3 p-4 rounded-lg" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
-                      <span className="text-2xl">{benefit.icon}</span>
+                      <div className="text-2xl shrink-0 flex items-center justify-center w-8 h-8">
+                        {typeof benefit.icon === 'string' ? benefit.icon : benefit.icon}
+                      </div>
                       <div>
                         <h4 className="font-bold mb-1" style={textStyle}>{benefit.title}</h4>
                         <p className="text-sm" style={textStyle}>{benefit.desc}</p>
@@ -935,7 +944,9 @@ export default function OfferPage() {
 
         {/* Guarantee Section */}
         <div className="mb-12 p-8 rounded-xl text-center" style={{ backgroundColor: '#fff', border: '2px solid #121212' }}>
-          <div className="text-5xl mb-4">🛡️</div>
+          <div className="mb-4">
+            <img src="https://assets.replocdn.com/projects/149a24dc-b65a-423d-a51b-0d10fafbd16f/004893f0-5ac7-4cc6-b441-9059376a5294?width=200" alt="Guarantee Shield" className="w-16 h-16 mx-auto" />
+          </div>
           <h2 className="text-2xl font-bold mb-4" style={headingStyle}>
             Every Order Comes With Our 30-Day Glow Guarantee
           </h2>
