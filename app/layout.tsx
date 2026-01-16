@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Inter, Coustard } from "next/font/google";
+import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,11 +17,8 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-const coustard = Coustard({
-  variable: "--font-coustard",
-  subsets: ["latin"],
-  weight: ["400"],
-});
+// Using Google Fonts link for Instrument Serif since it's not available in next/font/google
+// We'll add it via CSS import in globals.css
 
 export const metadata: Metadata = {
   title: "Do You Have a Parasite? | Doctor Approved Quiz | Serene Herbs",
@@ -37,9 +34,12 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link href="https://db.onlinewebfonts.com/c/bf01e62ae842ea4c690e771ec2427a1f?family=Cooper+Lt+BT+Bold" rel="stylesheet" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} ${coustard.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${inter.variable} antialiased`}
       >
         {children}
       </body>

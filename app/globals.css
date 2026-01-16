@@ -1,8 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #E0D1D5;
+  --foreground: #562935;
+  --callout-bg: #FFF4FD;
+  --callout-text: #562935;
+  --callout-border: #E0D1D5;
+  --button-accent: #7A1E3A;
+  --question-card-bg: #FFF4FD;
 }
 
 @theme inline {
@@ -10,6 +15,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+}
+
+:root {
+  --font-instrument-serif: 'Instrument Serif', serif;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -23,6 +32,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-instrument-serif), serif;
 }
 
 @keyframes checkmarkAppear {
@@ -64,14 +77,14 @@ body {
   position: absolute;
   inset: 0;
   border-radius: 8px;
-  background-color: #F9F4EA;
+  background-color: #E0D1D5;
   opacity: 0;
   transition: opacity 0.2s ease;
   z-index: -1;
 }
 
 .quiz-option:hover {
-  border-color: #121212;
+  border-color: #E0D1D5;
   border-width: 2px;
 }
 
@@ -81,13 +94,13 @@ body {
 
 .quiz-option:active {
   transform: scale(0.98);
-  background-color: #F9F4EA !important;
+  background-color: #E0D1D5 !important;
   transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .quiz-option.selected {
-  background-color: #F9F4EA !important;
-  border-color: #121212;
+  background-color: #E0D1D5 !important;
+  border-color: #E0D1D5;
   border-width: 2px;
 }
 
@@ -120,27 +133,26 @@ body {
 .cta-button {
   position: relative;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 14px rgba(188, 242, 99, 0.4);
+  box-shadow: 0 4px 14px rgba(122, 30, 58, 0.4);
 }
 
 .cta-button:hover {
-  box-shadow: 0 8px 25px rgba(188, 242, 99, 0.5), 0 4px 10px rgba(18, 18, 18, 0.1);
   filter: brightness(1.05);
 }
 
 .cta-button:active {
   transform: scale(0.98);
-  box-shadow: 0 2px 8px rgba(188, 242, 99, 0.3);
+  box-shadow: 0 2px 8px rgba(122, 30, 58, 0.3);
   transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Subtle pulse animation for CTA */
 @keyframes subtlePulse {
   0%, 100% {
-    box-shadow: 0 4px 14px rgba(188, 242, 99, 0.4);
+    box-shadow: 0 4px 14px rgba(122, 30, 58, 0.4);
   }
   50% {
-    box-shadow: 0 4px 20px rgba(188, 242, 99, 0.6);
+    box-shadow: 0 4px 20px rgba(122, 30, 58, 0.6);
   }
 }
 
@@ -208,7 +220,7 @@ body {
 }
 
 .swiper-pagination-bullet-active {
-  background: #121212 !important;
+  background: #562935 !important;
   width: 24px !important;
   border-radius: 4px !important;
 }
@@ -219,12 +231,12 @@ body {
   width: 40px !important;
   height: 40px !important;
   border-radius: 50% !important;
-  border: 1.5px solid #121212 !important;
+  border: 1.5px solid #E0D1D5 !important;
 }
 
 .swiper-button-prev:after,
 .swiper-button-next:after {
   font-size: 16px !important;
-  color: #121212 !important;
+  color: #562935 !important;
   font-weight: bold !important;
 }

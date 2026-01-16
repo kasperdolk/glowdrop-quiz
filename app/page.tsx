@@ -11,9 +11,9 @@ import { usePageTracking, useAnalytics, STEP_NAMES } from '@/lib/analytics';
 // --- CONFIGURATION & DATA ---
 
 const buttonStyle = {
-  background: 'linear-gradient(0deg, #BCF263 0%, #D7FD41 100%)',
-  border: '1.5px solid #121212',
-  borderRadius: '8px',
+  background: '#7A1E3A',
+  border: 'none',
+  borderRadius: '9999px',
   padding: '16px 32px',
   height: '48px',
   fontFamily: 'Inter',
@@ -22,7 +22,7 @@ const buttonStyle = {
   lineHeight: '150%',
   letterSpacing: '1px',
   textTransform: 'uppercase' as const,
-  color: '#121212',
+  color: '#FFFFFF',
   display: 'flex',
   flexDirection: 'row' as const,
   justifyContent: 'center' as const,
@@ -34,14 +34,14 @@ const buttonStyle = {
 
 const multipleChoiceButtonStyle = {
   backgroundColor: '#FFFFFF',
-  border: '1.5px solid #121212',
+  border: '1.5px solid #E0D1D5',
   borderRadius: '8px',
   padding: '16px',
   fontFamily: 'Inter',
   fontWeight: 600,
   fontSize: '16px',
   lineHeight: '150%',
-  color: '#121212',
+  color: '#562935',
   width: '100%',
   cursor: 'pointer',
   position: 'relative' as const,
@@ -49,14 +49,14 @@ const multipleChoiceButtonStyle = {
 };
 
 const textStyle = {
-  color: '#121212',
+  color: '#562935',
   fontFamily: 'Inter',
   lineHeight: '150%'
 };
 
 const headingStyle = {
-  color: '#121212',
-  fontFamily: '"Cooper Lt BT Bold", serif',
+  color: '#562935',
+  fontFamily: 'Instrument Serif, serif',
   lineHeight: '150%'
 };
 
@@ -149,38 +149,33 @@ const CONCERN_DATA: Record<string, {
 
 const STEPS = {
   INTRO: 0,
-  GENDER: 1, // NEW: Gender question as first question
-  AGE: 2,
-  CONCERN: 3,
-  SEVERITY: 4,
-  INTERSTITIAL_1: 5, // "You are in the right place"
-  LIFESTYLE_DIET: 6,
-  SLEEP: 7,
-  STRESS: 8,
-  SENSITIVITY: 9,
-  SOCIAL_PROOF: 10, // NEW: "5,245+ People thriving" - like Spartan's 1.4M
-  INTERSTITIAL_2: 11, // "Creating Profile" with modals
-  ANALYSIS_GRAPH: 12, // The "Collagen Loss" equivalent
-  PAST_SOLUTIONS: 13,
-  FAILURE_EXPLAINER: 14, // "Why most solutions fail"
-  TIME_COMMITMENT: 15,
-  MOTIVATIONAL: 16, // NEW: "Your Health Shouldn't Be Complicated" - like Spartan's busy schedule
-  EMOTIONAL_CHECK: 17, // "Feel older than you are?"
-  FUTURE_SELF: 18,
-  URGENCY: 19, // "Event coming up?"
-  COMMITMENT_1: 20, // NEW: First commitment modal
-  TIMELINE: 21, // NEW: Week-by-week expectation setter
-  COMMITMENT_2: 22, // NEW: Second commitment modal
-  OFFER_LOADING: 23, // NEW: Loading screen before offer with discount urgency
-  PREDICTION: 24 // "3 Months away" - redirects to /offer
+  GENDER: 1,
+  SKIN_TYPE: 2,
+  CURRENT_APPROACH: 3,
+  BIGGEST_FRUSTRATION: 4,
+  INTERSTITIAL_1: 5, // "The Problem" - Sun vs Self-Tanners
+  TIME_REALITY: 6,
+  PAST_DISAPPOINTMENTS: 7,
+  INTERSTITIAL_2: 8, // "Social Proof" - 86,000+ Women
+  DREAM_SCENARIO: 9,
+  CONFIDENCE_IMPACT: 10,
+  WHAT_MATTERS_MOST: 11,
+  INTERSTITIAL_3: 12, // "The Solution Tease" - Drink Your Tan
+  UPCOMING_MOTIVATION: 13,
+  COMMITMENT_CHECK: 14,
+  INTERSTITIAL_4: 15, // "How It Works" - Comparison table
+  RESULTS: 16, // "Your Personalized Glow Assessment"
+  FINAL_COMMITMENT: 17, // Final commitment modal
+  OFFER_LOADING: 18, // Loading screen before offer
+  PREDICTION: 19 // Redirects to /offer
 };
 
 const Header = () => (
   <div className="w-full bg-white shadow-sm flex justify-center items-center sticky top-0 z-50 mb-8" style={{ height: '80px' }}>
-    <img 
-      src="/logo_serene.png" 
-      alt="Serene Herbs" 
-      className="h-16 object-contain"
+    <img
+      src="/glowdrop-black-svg.svg"
+      alt="Glowdrop"
+      className="h-8 object-contain"
     />
   </div>
 );
@@ -189,7 +184,7 @@ const ProgressBar = ({ progress }: { progress: number }) => (
   <div className="w-full max-w-lg px-4">
     <div style={{ 
       borderRadius: '16px',
-      border: '2px solid #121212',
+      border: '2px solid #E0D1D5',
       background: '#FFFFFF',
       height: '8px',
       overflow: 'hidden',
@@ -198,7 +193,7 @@ const ProgressBar = ({ progress }: { progress: number }) => (
         className="h-full transition-all duration-500 ease-out" 
         style={{ 
           width: `${progress}%`,
-          background: 'linear-gradient(45deg, #FB82AD 20%, #F9C570 50%, #D7F186 100%)',
+          background: '#7A1E3A',
           borderRadius: '16px'
         }}
       ></div>
@@ -206,10 +201,10 @@ const ProgressBar = ({ progress }: { progress: number }) => (
   </div>
 );
 
-export default function SoursopQuizApp() {
+export default function GlowDropQuizApp() {
   const [step, setStep] = useState(STEPS.INTRO);
   const [loading, setLoading] = useState(false);
-  const [answers, setAnswers] = useState({});
+  const [answers, setAnswers] = useState<Record<string, any>>({});
   const [selectedItems, setSelectedItems] = useState<Record<number, Set<string>>>({});
   const [loadingMessage, setLoadingMessage] = useState('');
 
@@ -226,22 +221,16 @@ export default function SoursopQuizApp() {
     }, delay);
   };
 
-  // Enhanced loading for health profile analysis - PERSONALIZED
-  const handleHealthProfileAnalysis = (nextStep: number) => {
+  // Enhanced loading for glow assessment analysis
+  const handleGlowAssessment = (nextStep: number) => {
     setLoading(true);
     
-    // Get personalized loading messages based on their concerns
-    const concerns = selectedItems[STEPS.CONCERN];
-    const concernsList = concerns ? Array.from(concerns) : [];
-    const primaryConcern = concernsList[0] ? CONCERN_DATA[concernsList[0]]?.shortName?.toLowerCase() : 'health';
-    
     const messages = [
-      'Analyzing your responses...',
-      `Evaluating your ${primaryConcern} indicators...`,
-      'Cross-referencing with our health database...',
-      'Identifying your key health markers...',
-      'Calculating personalized risk factors...',
-      'Building your custom wellness profile...'
+      'Analyzing your tanning preferences...',
+      'Evaluating your skin type and concerns...',
+      'Matching you with your perfect glow protocol...',
+      'Calculating your personalized results...',
+      'Building your custom glow plan...'
     ];
     
     let messageIndex = 0;
@@ -260,18 +249,12 @@ export default function SoursopQuizApp() {
       clearInterval(messageInterval);
       setLoading(false);
       setStep(nextStep);
-    }, 10000);
+    }, 8000);
   };
 
   const selectAnswer = (key: string, value: any, autoAdvance: boolean = true) => {
     setAnswers(prev => ({ ...prev, [key]: value }));
-    if (autoAdvance) {
-      if (step === STEPS.INTRO) setStep(STEPS.AGE);
-      else if (step === STEPS.AGE) setStep(STEPS.CONCERN);
-      else if (step === STEPS.CONCERN) setStep(STEPS.SEVERITY);
-      else if (step === STEPS.SEVERITY) setStep(STEPS.INTERSTITIAL_1);
-      // ... continued logic in render
-    }
+    // Auto-advance logic is handled in handleOptionClick
   };
 
   // Handle button click with checkmark animation
@@ -311,55 +294,43 @@ export default function SoursopQuizApp() {
     return selectedItems[step]?.has(option) || false;
   };
 
-  // Get selected health concerns for personalization
-  const getSelectedConcerns = () => {
-    const concernStep = STEPS.CONCERN;
-    const concerns = selectedItems[concernStep];
-    if (!concerns || concerns.size === 0) {
-      // Default fallback if somehow no concerns selected
-      return ['🎈 Constant Bloating', '😴 Low Energy / Fatigue'];
-    }
-    return Array.from(concerns);
-  };
-
-  // Get personalized data based on selected concerns
-  const getPersonalizedData = () => {
-    const concerns = getSelectedConcerns();
-    const concernDataList = concerns.map(c => CONCERN_DATA[c]).filter(Boolean);
-    
-    // Primary concern is the first one selected
-    const primary = concernDataList[0] || CONCERN_DATA['🎈 Constant Bloating'];
-    const secondary = concernDataList[1] || concernDataList[0] || primary;
-    
+  // Get quiz answers for personalization
+  const getQuizAnswers = () => {
     return {
-      concerns: concernDataList,
-      primary,
-      secondary,
-      allSymptoms: concernDataList.map(c => c.symptom),
-      allBenefits: concernDataList.map(c => c.benefit),
-      allFutureStates: concernDataList.map(c => c.futureState),
-      healthMarkers: concernDataList.slice(0, 2).map(c => ({ name: c.healthMarker, status: c.markerStatus })),
-      shortNames: concernDataList.map(c => c.shortName)
+      gender: (answers as any)['gender'] || '',
+      skinType: (answers as any)['skinType'] || '',
+      currentApproach: (answers as any)['currentApproach'] || '',
+      frustration: (answers as any)['frustration'] || '',
+      timeReality: (answers as any)['timeReality'] || '',
+      pastDisappointments: (answers as any)['pastDisappointments'] || '',
+      dreamScenario: (answers as any)['dreamScenario'] || '',
+      confidenceImpact: (answers as any)['confidenceImpact'] || '',
+      whatMattersMost: (answers as any)['whatMattersMost'] || '',
+      upcomingMotivation: (answers as any)['upcomingMotivation'] || '',
+      commitmentCheck: (answers as any)['commitmentCheck'] || ''
     };
   };
 
   // --- RENDER STEPS ---
 
-  // 0. Intro / Landing - Now includes Gender question
+  // 0. Intro / Landing Screen
   if (step === STEPS.INTRO) {
     return (
-      <div className="min-h-screen flex flex-col items-center" style={{ backgroundColor: '#F9F4EA' }}>
+      <div className="min-h-screen flex flex-col items-center" style={{ backgroundColor: '#F9F7F5FF' }}>
         <Header />
         <div className="w-full max-w-xl px-4 mt-4 md:mt-8 text-center relative">
-          <h2 className="text-2xl md:text-3xl font-extrabold mb-6" style={headingStyle}>
-            Bloating, Brain Fog and Stubborn fat? <span className="underline decoration-4" style={{ textDecorationColor: '#D6FD41' }}>You might have a parasite!</span> Take this doctor approved quiz to find out.
+          <h2 className="text-2xl md:text-3xl font-extrabold mb-4" style={headingStyle}>
+            Wish You Could Wake Up With a Natural, Sun-Kissed Glow (even when it's winter)?
           </h2>
+          <p className="text-lg mb-8" style={textStyle}>
+            Take this 60-second quiz to discover why your current tanning routine isn't working—and what 86,000+ women are doing instead.
+          </p>
 
-          {/* Gender question directly in intro */}
-          <div className="bg-white rounded-xl p-6 mb-6" style={{ border: '1px solid #121212' }}>
-            <h3 className="text-xl font-bold mb-4" style={headingStyle}>What is your gender?</h3>
+          {/* Gender question */}
+          <div className="bg-white rounded-xl p-6 mb-6" style={{ border: '1px solid #E0D1D5' }}>
+            <h3 className="text-xl font-bold mb-4" style={headingStyle}>First, tell us about yourself:</h3>
             <div className="space-y-3">
-              {['👩 Female', '👨 Male', '🧑 Other / Prefer not to say'].map((option) => (
+              {['👩 I\'m a Woman', '👨 I\'m a Man'].map((option) => (
                 <button
                   key={option}
                   onClick={() => {
@@ -369,9 +340,9 @@ export default function SoursopQuizApp() {
                       updated.add(option);
                       return { ...prev, [STEPS.INTRO]: updated };
                     });
-                    // Auto-advance after selection
+                    trackAnswerSelect(step, option);
                     setTimeout(() => {
-                      setStep(STEPS.AGE);
+                      setStep(STEPS.SKIN_TYPE);
                     }, 400);
                   }}
                   className={`w-full transition-all flex items-center justify-between quiz-option ${selectedItems[STEPS.INTRO]?.has(option) ? 'selected' : ''}`}
@@ -381,7 +352,7 @@ export default function SoursopQuizApp() {
                   {selectedItems[STEPS.INTRO]?.has(option) && (
                     <CheckCircle
                       size={20}
-                      color="#121212"
+                      color="#562935"
                       className="checkmark-animate"
                     />
                   )}
@@ -390,7 +361,7 @@ export default function SoursopQuizApp() {
             </div>
           </div>
 
-          <p className="text-xs" style={{ color: '#121212', fontFamily: 'Inter', lineHeight: '150%' }}>
+          <p className="text-xs" style={{ color: '#562935', fontFamily: 'Inter', lineHeight: '150%' }}>
             By continuing, you agree to our Privacy Policy and Terms of Service.
           </p>
         </div>
@@ -398,84 +369,38 @@ export default function SoursopQuizApp() {
     );
   }
 
-  // 1. Gender Question - Now skipped as it's part of intro, kept for backwards compatibility
+  // 1. Gender Question - Redirect to SKIN_TYPE
   if (step === STEPS.GENDER) {
-    // Redirect to AGE if somehow landed here
-    setStep(STEPS.AGE);
+    setStep(STEPS.SKIN_TYPE);
     return null;
   }
 
-  // 2. Age Question
-  if (step === STEPS.AGE) {
+  // 2. Question 1: Skin Type
+  if (step === STEPS.SKIN_TYPE) {
     return (
-      <QuizLayout progress={8}>
-        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>How old are you?</h2>
-        <div className="space-y-3">
-          {['🌱 Under 30', '💪 30-39', '✨ 40-49', '🌟 50-59', '👑 Over 60'].map((age) => (
-            <button
-              key={age}
-              onClick={() => {
-                selectAnswer('age', age, false);
-                handleOptionClick(age, STEPS.CONCERN, false);
-              }}
-              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(age) ? 'selected' : ''}`}
-              style={multipleChoiceButtonStyle}
-            >
-              <span>{age}</span>
-              {isSelected(age) && (
-                <CheckCircle
-                  size={20}
-                  color="#121212"
-                  className="checkmark-animate"
-                />
-              )}
-            </button>
-          ))}
-        </div>
-      </QuizLayout>
-    );
-  }
-
-  // 2. Main Concern
-  if (step === STEPS.CONCERN) {
-    const continueButton = (
-      <button
-        onClick={() => {
-          trackButtonClick(step, 'Continue');
-          trackStepComplete(step);
-          setStep(STEPS.SEVERITY);
-        }}
-        className="w-full flex items-center justify-center gap-3 cta-button"
-        style={buttonStyle}
-      >
-        Continue <ArrowRight size={24} color="#121212" />
-      </button>
-    );
-
-    return (
-      <QuizLayout progress={10} fixedButton={continueButton}>
-        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>What is your biggest health-related concern?</h2>
-        <p className="text-center mb-6 text-sm" style={{ color: '#121212', fontFamily: 'Inter', lineHeight: '150%' }}>(Choose as many as you like)</p>
+      <QuizLayout progress={10}>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>How easily do you tan?</h2>
         <div className="space-y-3">
           {[
-            '🎈 Constant Bloating',
-            '😴 Low Energy / Fatigue',
-            '💓 High Blood Pressure',
-            '🛡️ Weak Immune System',
-            '🦴 Joint Inflammation',
-            '🍽️ Poor Digestion'
-          ].map((item) => (
+            '☀️ I burn first, then maybe get a little color',
+            '🌤️ I can tan, but it takes forever and fades fast',
+            '🔥 I tan easily but hate the sun damage',
+            '🧊 I can\'t tan—I just stay pale or burn'
+          ].map((option) => (
             <button
-              key={item}
-              onClick={() => handleOptionClick(item, STEPS.SEVERITY, true)}
-              className={`w-full text-left px-6 py-4 rounded-lg transition-all font-medium flex items-center justify-between quiz-option ${isSelected(item) ? 'selected' : ''}`}
+              key={option}
+              onClick={() => {
+                selectAnswer('skinType', option, false);
+                handleOptionClick(option, STEPS.CURRENT_APPROACH, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
               style={multipleChoiceButtonStyle}
             >
-              <span>{item}</span>
-              {isSelected(item) && (
+              <span>{option}</span>
+              {isSelected(option) && (
                 <CheckCircle
                   size={20}
-                  color="#121212"
+                  color="#562935"
                   className="checkmark-animate"
                 />
               )}
@@ -486,24 +411,33 @@ export default function SoursopQuizApp() {
     );
   }
 
-  // 3. Severity (Adaptation of "How deep are wrinkles")
-  if (step === STEPS.SEVERITY) {
+  // 3. Question 2: Current Approach
+  if (step === STEPS.CURRENT_APPROACH) {
     return (
       <QuizLayout progress={20}>
-        <h2 className="text-2xl font-bold text-center mb-8" style={headingStyle}>How often do you feel these symptoms?</h2>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>How do you currently try to get a tan?</h2>
         <div className="space-y-3">
-          {['😊 Almost never', '😐 A few times a week', '😩 Every single day'].map((opt) => (
-            <button 
-              key={opt}
-              onClick={() => handleOptionClick(opt, STEPS.INTERSTITIAL_1, false)}
-              className={`w-full py-4 rounded-lg font-medium flex items-center justify-between quiz-option ${isSelected(opt) ? 'selected' : ''}`}
+          {[
+            '☀️ Sunbathing or tanning beds',
+            '🧴 Self-tanners (lotions, mousses, sprays)',
+            '✨ Professional spray tans',
+            '💄 Just bronzer and makeup',
+            '🤷 I\'ve basically given up'
+          ].map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                selectAnswer('currentApproach', option, false);
+                handleOptionClick(option, STEPS.BIGGEST_FRUSTRATION, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
               style={multipleChoiceButtonStyle}
             >
-              <span>{opt}</span>
-              {isSelected(opt) && (
-                <CheckCircle 
-                  size={20} 
-                  color="#121212" 
+              <span>{option}</span>
+              {isSelected(option) && (
+                <CheckCircle
+                  size={20}
+                  color="#562935"
                   className="checkmark-animate"
                 />
               )}
@@ -514,159 +448,149 @@ export default function SoursopQuizApp() {
     );
   }
 
-  // 4. Interstitial 1 (Social Proof) - PERSONALIZED
-  if (step === STEPS.INTERSTITIAL_1) {
-    const personalized = getPersonalizedData();
-    const concernsList = personalized.shortNames.slice(0, 3).join(', ').toLowerCase();
+  // 4. Question 3: Biggest Frustration
+  if (step === STEPS.BIGGEST_FRUSTRATION) {
+    return (
+      <QuizLayout progress={30}>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>What's your #1 frustration with tanning?</h2>
+        <div className="space-y-3">
+          {[
+            '🦓 Streaks, patches, or looking orange',
+            '⏰ Takes too long (and stains everything)',
+            '☀️ I don\'t want UV damage to my skin',
+            '💸 Too expensive and fades too fast',
+            '😩 Nothing actually works for me'
+          ].map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                selectAnswer('frustration', option, false);
+                handleOptionClick(option, STEPS.INTERSTITIAL_1, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
+              style={multipleChoiceButtonStyle}
+            >
+              <span>{option}</span>
+              {isSelected(option) && (
+                <CheckCircle
+                  size={20}
+                  color="#562935"
+                  className="checkmark-animate"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </QuizLayout>
+    );
+  }
 
+  // 5. Interstitial 1: The Problem
+  if (step === STEPS.INTERSTITIAL_1) {
     const continueButton = (
-      <button onClick={() => setStep(STEPS.LIFESTYLE_DIET)} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
-        Continue <ArrowRight size={24} color="#121212" />
+      <button onClick={() => setStep(STEPS.TIME_REALITY)} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
+        Continue <ArrowRight size={24} color="#FFFFFF" />
       </button>
     );
 
     return (
-      <QuizLayout progress={25} fixedButton={continueButton}>
+      <QuizLayout progress={35} fixedButton={continueButton}>
         <div className="text-center py-4 md:py-8 animate-fade-in">
-          <div className="text-4xl mb-4">🦠</div>
-          <h2 className="text-2xl font-bold mb-4" style={headingStyle}>These could be signs of parasites!</h2>
-          <p className="mb-4" style={textStyle}>
-            <span className="font-bold">Over 3.5 billion people worldwide</span> are affected by parasites. Your symptoms of <span className="font-bold" style={{ color: '#121212' }}>{concernsList}</span> are common indicators of <span className="font-bold" style={{ color: '#ef4444' }}>parasitic infection.</span>
-          </p>
-          <p className="mb-4 text-sm" style={textStyle}>
-            The good news? We've helped thousands eliminate parasites naturally with the <span className="font-bold" style={{ color: '#121212' }}>Serene Herbs Parasite Cleanse Protocol.</span>
-          </p>
-
-          {/* Personalized concern badges */}
-          <div className="flex flex-wrap justify-center gap-2 mb-6">
-            {personalized.concerns.slice(0, 3).map((c, i) => (
-              <span
-                key={i}
-                className="px-3 py-1 rounded-full text-xs font-semibold"
-                style={{
-                  background: 'linear-gradient(90deg, rgba(189, 243, 97, 0.3) 0%, rgba(214, 253, 65, 0.3) 100%)',
-                  border: '1px solid #121212',
-                  color: '#121212'
-                }}
-              >
-                {c.emoji} {c.shortName}
-              </span>
-            ))}
+          <h2 className="text-2xl font-bold mb-6" style={headingStyle}>You're Not Alone. Here's The Harsh Truth...</h2>
+          
+          <div className="space-y-4 mb-6">
+            <div className="bg-white rounded-xl p-4" style={{ border: '1px solid #E0D1D5' }}>
+              <h3 className="font-bold mb-2" style={headingStyle}>Option A: Sun Tanning</h3>
+              <ul className="text-left text-sm space-y-1" style={textStyle}>
+                <li>• Burns and damages your skin</li>
+                <li>• Causes premature aging & wrinkles</li>
+                <li>• Not available year-round</li>
+                <li>• Fades within weeks</li>
+              </ul>
+            </div>
+            
+            <div className="bg-white rounded-xl p-4" style={{ border: '1px solid #E0D1D5' }}>
+              <h3 className="font-bold mb-2" style={headingStyle}>Option B: Self-Tanners</h3>
+              <ul className="text-left text-sm space-y-1" style={textStyle}>
+                <li>• 30+ minutes to apply properly</li>
+                <li>• Streaks, smell, stains everything</li>
+                <li>• Fades patchy within days</li>
+                <li>• Endless maintenance cycle</li>
+              </ul>
+            </div>
           </div>
 
-          {/* Before/After visuals */}
-          <div className="flex justify-center items-center gap-2 mb-6">
-             <div className="text-center">
-               <div className="w-28 h-28 md:w-36 md:h-36 rounded-lg overflow-hidden" style={{ border: '2px solid #121212' }}>
-                 <img src="/image-before.png" alt="Before" className="w-full h-full object-cover" />
-               </div>
-               <span className="text-xs font-semibold mt-1 block" style={textStyle}>Before</span>
-             </div>
-             <div className="flex items-center">
-               <ArrowRight size={20} color="#121212" />
-             </div>
-             <div className="text-center">
-               <div className="w-28 h-28 md:w-36 md:h-36 rounded-lg overflow-hidden" style={{ border: '2px solid #BDF361' }}>
-                 <img src="/image-after.png" alt="After" className="w-full h-full object-cover" />
-               </div>
-               <span className="text-xs font-semibold mt-1 block" style={textStyle}>After</span>
-             </div>
-          </div>
+          <p className="text-lg font-bold mb-4" style={headingStyle}>What if there was a third option?</p>
         </div>
       </QuizLayout>
     );
   }
 
-  // 5. Lifestyle (Adaptation of "Sun Exposure")
-  if (step === STEPS.LIFESTYLE_DIET) {
-    return (
-      <QuizLayout progress={35}>
-        {/* Question Image */}
-        <div className="mb-6 rounded-xl overflow-hidden" style={{ border: '2px solid #121212' }}>
-          <img 
-            src="/real-diet-img.jpg" 
-            alt="Healthy eating" 
-            className="w-full h-48 object-cover"
-            onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800&h=400&fit=crop'; }}
-          />
-        </div>
-        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>How would you describe your daily diet?</h2>
-        <div className="space-y-3">
-          {[
-            '🍔 Mostly processed / Fast food',
-            '🍩 Balanced but I love sugar',
-            '🥗 Strictly healthy / Organic',
-            '🤷 I am not sure'
-          ].map((opt) => (
-            <button 
-              key={opt} 
-              onClick={() => handleOptionClick(opt, STEPS.SLEEP, false)} 
-              className={`w-full py-4 rounded-lg font-medium flex items-center justify-between quiz-option ${isSelected(opt) ? 'selected' : ''}`}
-              style={multipleChoiceButtonStyle}
-            >
-              <span>{opt}</span>
-              {isSelected(opt) && (
-                <CheckCircle 
-                  size={20} 
-                  color="#121212" 
-                  className="checkmark-animate"
-                />
-              )}
-            </button>
-          ))}
-        </div>
-        
-        {/* Why we ask box */}
-        <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(189, 243, 97, 0.15)', border: '1px solid #BDF361' }}>
-          <h4 className="font-bold text-sm mb-2" style={textStyle}>💡 Why we ask</h4>
-          <p className="text-xs" style={textStyle}>
-            Your diet directly impacts gut health and inflammation levels. Understanding your eating habits helps us tailor recommendations that work with your lifestyle, not against it.
-          </p>
-        </div>
-      </QuizLayout>
-    );
-  }
-
-  // 6. Sleep
-  if (step === STEPS.SLEEP) {
+  // 6. Question 4: Time Reality
+  if (step === STEPS.TIME_REALITY) {
     return (
       <QuizLayout progress={45}>
-        {/* Question Image */}
-        <div className="mb-6 rounded-xl overflow-hidden" style={{ border: '2px solid #121212' }}>
-          <img 
-            src="/real-sleep-img.jpg" 
-            alt="Quality sleep" 
-            className="w-full h-48 object-cover"
-            onError={(e) => { e.currentTarget.src = 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?w=800&h=400&fit=crop'; }}
-          />
-        </div>
-        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>How much sleep do you usually get?</h2>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>How much time do you have for a tanning routine?</h2>
         <div className="space-y-3">
-          {['😴 More than 8 hours', '🛏️ 7-8 hours', '⏰ Less than 6 hours', '🌙 My sleep is unpredictable'].map((opt) => (
-            <button 
-              key={opt} 
-              onClick={() => handleOptionClick(opt, STEPS.STRESS, false)} 
-              className={`w-full py-4 rounded-lg font-medium flex items-center justify-between quiz-option ${isSelected(opt) ? 'selected' : ''}`}
+          {[
+            '⏱️ 5 minutes max',
+            '😅 I barely have time to shower',
+            '🙄 I have time but hate wasting it on this'
+          ].map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                selectAnswer('timeReality', option, false);
+                handleOptionClick(option, STEPS.PAST_DISAPPOINTMENTS, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
               style={multipleChoiceButtonStyle}
             >
-              <span>{opt}</span>
-              {isSelected(opt) && (
-                <CheckCircle 
-                  size={20} 
-                  color="#121212" 
+              <span>{option}</span>
+              {isSelected(option) && (
+                <CheckCircle
+                  size={20}
+                  color="#562935"
                   className="checkmark-animate"
                 />
               )}
             </button>
           ))}
         </div>
-        
-        {/* Why we ask box */}
-        <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(189, 243, 97, 0.15)', border: '1px solid #BDF361' }}>
-          <h4 className="font-bold text-sm mb-2" style={textStyle}>💡 Why we ask</h4>
-          <p className="text-xs" style={textStyle}>
-            Quality sleep is essential for your body's natural detoxification and healing processes. Poor sleep weakens immunity and can intensify digestive issues and inflammation.
-          </p>
+      </QuizLayout>
+    );
+  }
+
+  // 7. Question 5: Past Disappointments
+  if (step === STEPS.PAST_DISAPPOINTMENTS) {
+    return (
+      <QuizLayout progress={50}>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>Have you been disappointed by tanning products before?</h2>
+        <div className="space-y-3">
+          {[
+            '😤 Yes, multiple times (graveyard of half-used bottles)',
+            '😔 Yes, once was enough to make me skeptical',
+            '🆕 I haven\'t found anything that works yet'
+          ].map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                selectAnswer('pastDisappointments', option, false);
+                handleOptionClick(option, STEPS.INTERSTITIAL_2, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
+              style={multipleChoiceButtonStyle}
+            >
+              <span>{option}</span>
+              {isSelected(option) && (
+                <CheckCircle
+                  size={20}
+                  color="#562935"
+                  className="checkmark-animate"
+                />
+              )}
+            </button>
+          ))}
         </div>
       </QuizLayout>
     );
@@ -677,7 +601,7 @@ export default function SoursopQuizApp() {
     return (
       <QuizLayout progress={55}>
         {/* Question Image */}
-        <div className="mb-6 rounded-xl overflow-hidden" style={{ border: '2px solid #121212' }}>
+        <div className="mb-6 rounded-xl overflow-hidden" style={{ border: '2px solid #E0D1D5' }}>
           <img 
             src="/real-stress-img.jpg" 
             alt="Managing stress" 
@@ -698,7 +622,7 @@ export default function SoursopQuizApp() {
               {isSelected(opt) && (
                 <CheckCircle 
                   size={20} 
-                  color="#121212" 
+                  color="#562935" 
                   className="checkmark-animate"
                 />
               )}
@@ -707,7 +631,7 @@ export default function SoursopQuizApp() {
         </div>
         
         {/* Why we ask box */}
-        <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: 'rgba(189, 243, 97, 0.15)', border: '1px solid #BDF361' }}>
+        <div className="mt-6 p-4 rounded-lg" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
           <h4 className="font-bold text-sm mb-2" style={textStyle}>💡 Why we ask</h4>
           <p className="text-xs" style={textStyle}>
             Chronic stress elevates cortisol levels, which disrupts gut health, weakens immunity, and increases inflammation throughout your body. Managing stress is key to overall wellness.
@@ -736,7 +660,7 @@ export default function SoursopQuizApp() {
               {isSelected(opt) && (
                 <CheckCircle 
                   size={20} 
-                  color="#121212" 
+                  color="#562935" 
                   className="checkmark-animate"
                 />
               )}
@@ -755,7 +679,7 @@ export default function SoursopQuizApp() {
       <button onClick={() => {
         handleNextWithDelay(STEPS.ANALYSIS_GRAPH, 800);
       }} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
-        Continue <ArrowRight size={24} color="#121212" />
+        Continue <ArrowRight size={24} color="#FFFFFF" />
       </button>
     );
 
@@ -780,15 +704,15 @@ export default function SoursopQuizApp() {
                   alt="Customer before" 
                   className="w-full h-24 md:h-32 object-cover"
                 />
-                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ backgroundColor: '#ef4444', color: '#fff' }}>BEFORE</span>
+                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ backgroundColor: '#7A1E3A', color: '#ffe1ea' }}>BEFORE</span>
               </div>
-              <div className="relative rounded-lg overflow-hidden" style={{ border: '2px solid #22c55e' }}>
+              <div className="relative rounded-lg overflow-hidden" style={{ border: '2px solid #7A1E3A' }}>
                 <img 
                   src="/image_after_1.png" 
                   alt="Customer after" 
                   className="w-full h-24 md:h-32 object-cover"
                 />
-                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ backgroundColor: '#22c55e', color: '#fff' }}>AFTER</span>
+                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ backgroundColor: '#ffe1ea', color: '#7A1E3A' }}>AFTER</span>
               </div>
 
               {/* Before/After 2 */}
@@ -798,15 +722,15 @@ export default function SoursopQuizApp() {
                   alt="Customer before" 
                   className="w-full h-24 md:h-32 object-cover"
                 />
-                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ backgroundColor: '#ef4444', color: '#fff' }}>BEFORE</span>
+                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ backgroundColor: '#7A1E3A', color: '#ffe1ea' }}>BEFORE</span>
               </div>
-              <div className="relative rounded-lg overflow-hidden" style={{ border: '2px solid #22c55e' }}>
+              <div className="relative rounded-lg overflow-hidden" style={{ border: '2px solid #7A1E3A' }}>
                 <img 
                   src="/image_after_2.png" 
                   alt="Customer after" 
                   className="w-full h-24 md:h-32 object-cover"
                 />
-                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ backgroundColor: '#22c55e', color: '#fff' }}>AFTER</span>
+                <span className="absolute bottom-1 left-1 px-1.5 py-0.5 rounded text-[9px] font-bold" style={{ backgroundColor: '#ffe1ea', color: '#7A1E3A' }}>AFTER</span>
               </div>
             </div>
             <p className="text-[10px] mt-2 text-gray-500">*Results may vary. Individual results depend on many factors.</p>
@@ -837,7 +761,7 @@ export default function SoursopQuizApp() {
 
     const continueButton = (
       <button onClick={() => setStep(STEPS.PAST_SOLUTIONS)} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
-        Continue <ArrowRight size={24} color="#121212" />
+        Continue <ArrowRight size={24} color="#FFFFFF" />
       </button>
     );
 
@@ -847,7 +771,7 @@ export default function SoursopQuizApp() {
         <p className="text-center text-sm mb-4" style={textStyle}>Based on your concerns: <strong>{personalized.shortNames.join(', ')}</strong></p>
         
         {/* Graph Visual */}
-        <div className="relative h-48 w-full mb-4" style={{ backgroundColor: '#F9F4EA', borderBottom: '1px solid #121212', borderLeft: '1px solid #121212' }}>
+        <div className="relative h-48 w-full mb-4" style={{ backgroundColor: '#FFF4FD', borderBottom: '1px solid #E0D1D5', borderLeft: '1px solid #E0D1D5' }}>
           {/* Curve */}
           <svg viewBox="0 0 100 60" className="w-full h-full" preserveAspectRatio="none">
             <path d="M0,55 C20,50 35,35 50,25 C65,15 80,10 100,5" fill="none" stroke="rgba(239, 68, 68, 0.5)" strokeWidth="3" />
@@ -856,7 +780,7 @@ export default function SoursopQuizApp() {
           </svg>
           {/* User Label */}
           <div className="absolute" style={{ top: '15%', right: '22%' }}>
-            <span className="text-[10px] px-2 py-1 rounded" style={{ backgroundColor: '#121212', color: '#F9F4EA' }}>You</span>
+            <span className="text-[10px] px-2 py-1 rounded" style={{ backgroundColor: '#562935', color: '#FFF4FD' }}>You</span>
           </div>
           {/* Y-axis label */}
           <div className="absolute left-2 top-2 text-[10px]" style={textStyle}>Severity</div>
@@ -875,7 +799,7 @@ export default function SoursopQuizApp() {
         {/* Personalized Health Markers */}
         <div className="grid grid-cols-2 gap-3 text-sm mb-6">
           {personalized.healthMarkers.map((marker, i) => (
-            <div key={i} className="p-3 rounded-lg" style={{ backgroundColor: '#F9F4EA', border: '1px solid #121212' }}>
+            <div key={i} className="p-3 rounded-lg" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
               <span className="block text-xs mb-1" style={textStyle}>{marker.name}</span>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-red-500">{marker.status}</span>
@@ -891,7 +815,7 @@ export default function SoursopQuizApp() {
         </div>
 
         {/* Good news callout */}
-        <div className="p-3 rounded-lg mb-2 md:mb-6" style={{ backgroundColor: 'rgba(189, 243, 97, 0.15)', border: '1px solid #BDF361' }}>
+        <div className="p-3 rounded-lg mb-2 md:mb-6" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
           <p className="text-sm text-center" style={textStyle}>
             <strong>Good news:</strong> Our 16-herb Parasite Cleanse Formula eliminates parasites naturally while relieving {personalized.shortNames.slice(0, 2).join(' & ').toLowerCase()}
           </p>
@@ -908,7 +832,7 @@ export default function SoursopQuizApp() {
         className="w-full flex items-center justify-center gap-3 cta-button"
         style={buttonStyle}
       >
-        Continue <ArrowRight size={24} color="#121212" />
+        Continue <ArrowRight size={24} color="#FFFFFF" />
       </button>
     );
 
@@ -928,7 +852,7 @@ export default function SoursopQuizApp() {
                {isSelected(opt) && (
                  <CheckCircle
                    size={20}
-                   color="#121212"
+                   color="#562935"
                    className="checkmark-animate"
                  />
                )}
@@ -945,7 +869,7 @@ export default function SoursopQuizApp() {
 
     const continueButton = (
       <button onClick={() => setStep(STEPS.TIME_COMMITMENT)} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
-        Continue <ArrowRight size={24} color="#121212" />
+        Continue <ArrowRight size={24} color="#FFFFFF" />
       </button>
     );
 
@@ -976,7 +900,7 @@ export default function SoursopQuizApp() {
                 </ul>
             </div>
             {/* Serene Herbs Card */}
-            <div className="flex-1 p-4 rounded-lg border-2" style={{ backgroundColor: 'rgba(189, 243, 97, 0.12)', borderColor: '#BDF361' }}>
+            <div className="flex-1 p-4 rounded-lg border-2" style={{ backgroundColor: '#FFF4FD', borderColor: '#E0D1D5' }}>
                 <div className="flex justify-center mb-2">
                   <img src="/logo_serene.png" alt="Serene Herbs" className="h-8 object-contain" />
                 </div>
@@ -999,12 +923,12 @@ export default function SoursopQuizApp() {
         </div>
 
         {/* Personalized benefits with stats */}
-        <div className="p-4 rounded-lg mb-6" style={{ backgroundColor: '#F9F4EA', border: '1px solid #121212' }}>
+        <div className="p-4 rounded-lg mb-6" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
           <p className="text-sm font-bold mb-4 text-center" style={textStyle}>Specifically for your concerns, Serene Herbs:</p>
           <ul className="space-y-4">
             {personalized.concerns.slice(0, 3).map((concern, i) => (
               <li key={i} className="flex items-start gap-3" style={textStyle}>
-                <CheckCircle size={20} className="shrink-0 mt-0.5" color="#22c55e" />
+                <CheckCircle size={20} className="shrink-0 mt-0.5" color="#7A1E3A" />
                 <div>
                   <span className="text-sm font-medium">{concern.benefit}</span>
                   <div className="text-xs text-green-600 font-semibold mt-1">
@@ -1040,7 +964,7 @@ export default function SoursopQuizApp() {
                {isSelected(opt) && (
                  <CheckCircle 
                   size={20} 
-                  color="#121212" 
+                  color="#562935" 
                   className="checkmark-animate"
                 />
               )}
@@ -1057,7 +981,7 @@ export default function SoursopQuizApp() {
 
     const continueButton = (
       <button onClick={() => setStep(STEPS.EMOTIONAL_CHECK)} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
-        Continue <ArrowRight size={24} color="#121212" />
+        Continue <ArrowRight size={24} color="#FFFFFF" />
       </button>
     );
 
@@ -1091,11 +1015,11 @@ export default function SoursopQuizApp() {
              </div>
              
              <div className="flex items-center px-2">
-               <ArrowRight size={28} color="#121212" strokeWidth={3} />
+               <ArrowRight size={28} color="#562935" strokeWidth={3} />
              </div>
              
              <div className="text-center flex-1">
-               <div className="w-full max-w-[140px] md:max-w-[180px] mx-auto rounded-lg overflow-hidden mb-2" style={{ border: '2px solid #22c55e' }}>
+               <div className="w-full max-w-[140px] md:max-w-[180px] mx-auto rounded-lg overflow-hidden mb-2" style={{ border: '2px solid #7A1E3A' }}>
                  <img 
                    src="/image_after_1.png" 
                    alt="After - Flat stomach" 
@@ -1104,9 +1028,9 @@ export default function SoursopQuizApp() {
                </div>
                <div className="flex items-center justify-center gap-2 mb-2">
                  <span className="text-2xl">✨</span>
-                 <span className="text-xs font-bold uppercase" style={{ color: '#22c55e' }}>After</span>
+                 <span className="text-xs font-bold uppercase" style={{ color: '#7A1E3A' }}>After</span>
                </div>
-               <div className="text-[11px] font-semibold" style={{ color: '#22c55e' }}>
+               <div className="text-[11px] font-semibold" style={{ color: '#7A1E3A' }}>
                  Flat & Comfortable Stomach
                </div>
              </div>
@@ -1114,22 +1038,22 @@ export default function SoursopQuizApp() {
 
           {/* Key benefits for busy people */}
           <div className="space-y-3 mb-2 md:mb-8">
-            <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#F9F4EA' }}>
-              <CheckCircle size={20} color="#22c55e" className="shrink-0 mt-1" />
+            <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#FFF4FD' }}>
+              <CheckCircle size={20} color="#7A1E3A" className="shrink-0 mt-1" />
               <div>
                 <h4 className="font-bold text-sm mb-1" style={textStyle}>Just 2 Minutes, Twice Daily</h4>
                 <p className="text-xs" style={textStyle}>No complicated routines. Simply take 1 tablespoon after meals.</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#F9F4EA' }}>
-              <CheckCircle size={20} color="#22c55e" className="shrink-0 mt-1" />
+            <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#FFF4FD' }}>
+              <CheckCircle size={20} color="#7A1E3A" className="shrink-0 mt-1" />
               <div>
                 <h4 className="font-bold text-sm mb-1" style={textStyle}>Works While You Live Your Life</h4>
                 <p className="text-xs" style={textStyle}>No special diets, no gym required. Just natural, sustained wellness support.</p>
               </div>
             </div>
-            <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#F9F4EA' }}>
-              <CheckCircle size={20} color="#22c55e" className="shrink-0 mt-1" />
+            <div className="flex items-start gap-3 p-3 rounded-lg" style={{ backgroundColor: '#FFF4FD' }}>
+              <CheckCircle size={20} color="#7A1E3A" className="shrink-0 mt-1" />
               <div>
                 <h4 className="font-bold text-sm mb-1" style={textStyle}>Real Results in Days, Not Months</h4>
                 <p className="text-xs" style={textStyle}>Many people feel improvements within the first week.</p>
@@ -1163,7 +1087,7 @@ export default function SoursopQuizApp() {
                {isSelected(opt) && (
                  <CheckCircle 
                    size={20} 
-                   color="#121212" 
+                   color="#562935" 
                    className="checkmark-animate"
                  />
                )}
@@ -1201,7 +1125,7 @@ export default function SoursopQuizApp() {
                {isSelected(opt.t) && (
                  <CheckCircle 
                    size={20} 
-                   color="#121212" 
+                   color="#562935" 
                    className="checkmark-animate"
                  />
                )}
@@ -1232,7 +1156,7 @@ export default function SoursopQuizApp() {
                {isSelected(opt) && (
                  <CheckCircle 
                    size={20} 
-                   color="#121212" 
+                   color="#562935" 
                    className="checkmark-animate"
                  />
                )}
@@ -1246,9 +1170,9 @@ export default function SoursopQuizApp() {
   // 19. NEW Commitment Modal 1 (like Spartan's commitment questions during loading)
   if (step === STEPS.COMMITMENT_1) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#F9F4EA' }}>
+      <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#F9F7F5FF' }}>
         <div className="w-full max-w-md px-4">
-          <div className="p-8 rounded-xl animate-fade-in" style={{ backgroundColor: '#fff', border: '2px solid #121212' }}>
+          <div className="p-8 rounded-xl animate-fade-in" style={{ backgroundColor: '#fff', border: '2px solid #E0D1D5' }}>
             <p className="text-center text-sm mb-4 text-gray-600" style={{ fontFamily: 'Inter' }}>To move forward, please specify</p>
             <h2 className="text-xl font-bold text-center mb-8" style={headingStyle}>
               Are you ready to transform your health naturally?
@@ -1258,9 +1182,10 @@ export default function SoursopQuizApp() {
                 onClick={() => setStep(STEPS.TIMELINE)}
                 className="flex-1 py-4 rounded-lg font-bold transition-all"
                 style={{
-                  backgroundColor: '#BDF361',
-                  border: '1.5px solid #121212',
-                  color: '#121212',
+                  backgroundColor: '#7A1E3A',
+                  border: 'none',
+                  borderRadius: '9999px',
+                  color: '#FFFFFF',
                   fontFamily: 'Inter',
                   cursor: 'pointer'
                 }}
@@ -1271,9 +1196,10 @@ export default function SoursopQuizApp() {
                 onClick={() => setStep(STEPS.TIMELINE)}
                 className="flex-1 py-4 rounded-lg font-bold transition-all"
                 style={{
-                  backgroundColor: '#BDF361',
-                  border: '1.5px solid #121212',
-                  color: '#121212',
+                  backgroundColor: '#7A1E3A',
+                  border: 'none',
+                  borderRadius: '9999px',
+                  color: '#FFFFFF',
                   fontFamily: 'Inter',
                   cursor: 'pointer'
                 }}
@@ -1295,7 +1221,7 @@ export default function SoursopQuizApp() {
 
     const continueButton = (
       <button onClick={() => setStep(STEPS.COMMITMENT_2)} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
-        Continue <ArrowRight size={24} color="#121212" />
+        Continue <ArrowRight size={24} color="#FFFFFF" />
       </button>
     );
 
@@ -1323,7 +1249,7 @@ export default function SoursopQuizApp() {
                       {isGoal && (
                         <div 
                           className="absolute -top-8 left-1/2 transform -translate-x-1/2 px-2 py-1 rounded-full text-xs font-bold whitespace-nowrap"
-                          style={{ backgroundColor: '#22c55e', color: '#fff' }}
+                          style={{ backgroundColor: '#7A1E3A', color: '#fff' }}
                         >
                           ✓ Goal
                         </div>
@@ -1333,7 +1259,7 @@ export default function SoursopQuizApp() {
                         style={{ 
                           height: `${height * 2}px`,
                           backgroundColor: colors[i],
-                          border: '1.5px solid #121212'
+                          border: '1.5px solid #E0D1D5'
                         }}
                       ></div>
                     </div>
@@ -1351,7 +1277,7 @@ export default function SoursopQuizApp() {
                 { week: 'Week 4-8', benefit: personalized.concerns[2]?.benefit || 'Sustained wellness support', emoji: '✨' },
                 { week: 'Week 8-12', benefit: 'Full transformation and lasting results', emoji: '🎯' }
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: '#F9F4EA', border: '1px solid #121212' }}>
+                <div key={i} className="flex items-center gap-3 p-3 rounded-lg" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
                   <span className="text-2xl">{item.emoji}</span>
                   <div className="flex-1">
                     <h4 className="font-bold text-sm" style={textStyle}>{item.week}</h4>
@@ -1369,9 +1295,9 @@ export default function SoursopQuizApp() {
   // 21. NEW Commitment Modal 2
   if (step === STEPS.COMMITMENT_2) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#F9F4EA' }}>
+      <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#F9F7F5FF' }}>
         <div className="w-full max-w-md px-4">
-          <div className="p-8 rounded-xl animate-fade-in" style={{ backgroundColor: '#fff', border: '2px solid #121212' }}>
+          <div className="p-8 rounded-xl animate-fade-in" style={{ backgroundColor: '#fff', border: '2px solid #E0D1D5' }}>
             <p className="text-center text-sm mb-4 text-gray-600" style={{ fontFamily: 'Inter' }}>To move forward, please specify</p>
             <h2 className="text-xl font-bold text-center mb-8" style={headingStyle}>
               Did you know that parasites are a hidden cause of bloating, fatigue, and weight gain?
@@ -1383,9 +1309,10 @@ export default function SoursopQuizApp() {
                 }}
                 className="flex-1 py-4 rounded-lg font-bold transition-all"
                 style={{
-                  backgroundColor: '#BDF361',
-                  border: '1.5px solid #121212',
-                  color: '#121212',
+                  backgroundColor: '#7A1E3A',
+                  border: 'none',
+                  borderRadius: '9999px',
+                  color: '#FFFFFF',
                   fontFamily: 'Inter',
                   cursor: 'pointer'
                 }}
@@ -1398,9 +1325,10 @@ export default function SoursopQuizApp() {
                 }}
                 className="flex-1 py-4 rounded-lg font-bold transition-all"
                 style={{
-                  backgroundColor: '#BDF361',
-                  border: '1.5px solid #121212',
-                  color: '#121212',
+                  backgroundColor: '#7A1E3A',
+                  border: 'none',
+                  borderRadius: '9999px',
+                  color: '#FFFFFF',
                   fontFamily: 'Inter',
                   cursor: 'pointer'
                 }}
@@ -1434,7 +1362,7 @@ export default function SoursopQuizApp() {
         className="w-full flex items-center justify-center gap-3 cta-button cta-button-pulse"
         style={buttonStyle}
       >
-        CLAIM YOUR DISCOUNT <ArrowRight size={24} color="#121212" />
+        CLAIM YOUR DISCOUNT <ArrowRight size={24} color="#FFFFFF" />
       </button>
     );
 
@@ -1445,7 +1373,7 @@ export default function SoursopQuizApp() {
             className="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3" 
             style={{ 
               background: 'linear-gradient(90deg, rgba(189, 243, 97, 0.3) 0%, rgba(214, 253, 65, 0.3) 100%)',
-              border: '1px solid #121212',
+              border: '1px solid #E0D1D5',
               color: '#121212'
             }}
           >
@@ -1463,25 +1391,25 @@ export default function SoursopQuizApp() {
             <div 
               key={i} 
               className="flex items-center gap-3 p-4 rounded-lg"
-              style={{ 
-                backgroundColor: '#F9F4EA', 
-                border: '1px solid #121212' 
+              style={{
+                backgroundColor: '#FFF4FD',
+                border: '1px solid #E0D1D5'
               }}
             >
-              <div className="w-12 h-12 rounded-full flex items-center justify-center text-xl" style={{ backgroundColor: '#fff', border: '1px solid #121212' }}>
+              <div className="w-12 h-12 rounded-full flex items-center justify-center text-xl" style={{ backgroundColor: '#fff', border: '1px solid #E0D1D5' }}>
                 {concern.emoji}
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <span className="font-bold" style={textStyle}>{concern.shortName}</span>
-                  <ArrowDown size={14} color="#121212" />
+                  <ArrowDown size={14} color="#562935" />
                 </div>
                 <span className="font-bold text-green-600">{concern.futureState}</span>
                 <div className="text-[12px] mt-1" style={textStyle}>
                   Week {i === 0 ? '1-2' : i === 1 ? '2-4' : '4-8'}: {concern.benefit}
                 </div>
               </div>
-              <CheckCircle size={24} color="#22c55e" />
+              <CheckCircle size={24} color="#7A1E3A" />
             </div>
           ))}
         </div>
@@ -1496,7 +1424,7 @@ export default function SoursopQuizApp() {
                 <div className="text-[12px] mt-1 text-red-500 font-medium">{personalized.primary.symptom.split(' ').slice(0, 2).join(' ')}</div>
             </div>
             <div className="flex flex-col items-center px-2">
-              <ArrowRight className="w-6 h-6" color="#121212" />
+              <ArrowRight className="w-6 h-6" color="#562935" />
               <span className="text-[10px] font-bold mt-1" style={textStyle}>90 DAYS</span>
             </div>
             <div className="text-center flex-1">
@@ -1518,11 +1446,11 @@ export default function SoursopQuizApp() {
 
 function QuizLayout({ children, progress, fixedButton }: { children: React.ReactNode; progress: number; fixedButton?: React.ReactNode }) {
   return (
-    <div className={`min-h-screen flex flex-col items-center ${fixedButton ? 'pb-24 md:pb-0' : ''}`} style={{ backgroundColor: '#F9F4EA' }}>
+    <div className={`min-h-screen flex flex-col items-center ${fixedButton ? 'pb-24 md:pb-0' : ''}`} style={{ backgroundColor: '#F9F7F5FF' }}>
       <Header />
       <ProgressBar progress={progress} />
       <div className="w-full max-w-lg px-4 mt-8 mb-8 animate-fade-in-up">
-        <div className="p-6 md:p-8 rounded-xl shadow-sm" style={{ backgroundColor: 'rgba(255, 255, 255, 1)', border: '1px solid #121212' }}>
+        <div className="p-6 md:p-8 rounded-xl shadow-sm" style={{ backgroundColor: 'rgba(255, 255, 255, 1)', border: '1px solid #E0D1D5' }}>
            {children}
            {/* Desktop button (inline) */}
            {fixedButton && (
@@ -1538,7 +1466,7 @@ function QuizLayout({ children, progress, fixedButton }: { children: React.React
           className="fixed bottom-0 left-0 right-0 z-50 md:hidden"
           style={{
             backgroundColor: '#fff',
-            borderTop: '2px solid #121212',
+            borderTop: '2px solid #E0D1D5',
             borderRadius: '16px 16px 0 0',
             padding: '12px 16px',
             boxShadow: '0 -4px 20px rgba(0,0,0,0.1)'
@@ -1553,9 +1481,9 @@ function QuizLayout({ children, progress, fixedButton }: { children: React.React
 
 function InterstitialLoading({ text, icon = false }: { text: string; icon?: boolean }) {
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: '#F9F4EA' }}>
-             <div className="w-16 h-16 border-4 rounded-full animate-spin mb-6" style={{ borderColor: '#F9F4EA', borderTopColor: '#121212' }}></div>
-             {icon && <CheckCircle className="w-12 h-12 mb-4 animate-bounce" color="#121212" />}
+        <div className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: '#F9F7F5FF' }}>
+             <div className="w-16 h-16 border-4 rounded-full animate-spin mb-6" style={{ borderColor: '#E0D1D5', borderTopColor: '#562935' }}></div>
+             {icon && <CheckCircle className="w-12 h-12 mb-4 animate-bounce" color="#562935" />}
              <h2 
                key={text}
                className="text-xl font-bold text-center loading-text-fade" 
@@ -1615,9 +1543,9 @@ function OfferLoadingScreen() {
   const todayFormatted = today.toLocaleDateString('en-US', dateOptions);
   
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: '#F9F4EA' }}>
+    <div className="min-h-screen flex flex-col items-center justify-center p-4" style={{ backgroundColor: '#F9F7F5FF' }}>
       <div className="text-center max-w-md">
-        <div className="w-20 h-20 border-4 rounded-full animate-spin mb-6 mx-auto" style={{ borderColor: '#F9F4EA', borderTopColor: '#121212' }}></div>
+        <div className="w-20 h-20 border-4 rounded-full animate-spin mb-6 mx-auto" style={{ borderColor: '#E0D1D5', borderTopColor: '#562935' }}></div>
         
         <h2 className="text-2xl font-bold mb-4 animate-fade-in" style={headingStyle}>
           Getting your personalized parasite cleanse protocol + exclusive discount
@@ -1647,7 +1575,7 @@ function OfferLoadingScreen() {
             <p className="text-xs font-bold" style={textStyle}>
               — {testimonials[currentTestimonial].name}
             </p>
-            <span className="text-[10px] px-2 py-0.5 rounded mt-2 inline-block" style={{ backgroundColor: '#22c55e', color: '#fff' }}>
+            <span className="text-[10px] px-2 py-0.5 rounded mt-2 inline-block" style={{ backgroundColor: '#7A1E3A', color: '#fff' }}>
               ✓ Verified Buyer
             </span>
           </div>
@@ -1659,7 +1587,7 @@ function OfferLoadingScreen() {
                 key={i} 
                 className="w-2 h-2 rounded-full transition-all"
                 style={{ 
-                  backgroundColor: i === currentTestimonial ? '#121212' : '#d1d5db'
+                  backgroundColor: i === currentTestimonial ? '#562935' : '#d1d5db'
                 }}
               />
             ))}
