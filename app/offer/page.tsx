@@ -83,6 +83,7 @@ interface ProductVariant {
   price: string;
   compare_at_price: string | null;
   option1: string;
+  option2?: string; // For quantity
   price_currency?: string;
   compare_at_price_currency?: string;
 }
@@ -114,6 +115,9 @@ interface PricingOption {
   variantId: string;
   image: string;
   currency: string;
+  quantity: number;
+  freeItems?: { name: string; image: string; count: number }[];
+  totalItems: number;
 }
 
 const INGREDIENTS = [
@@ -211,6 +215,7 @@ const FAQS = [
 
 export default function OfferPage() {
   const [selectedPlan, setSelectedPlan] = useState<string>('');
+  const [selectedVariant, setSelectedVariant] = useState<string>(''); // Color selection
   const [activeTab, setActiveTab] = useState<'details' | 'benefits' | 'ingredients'>('benefits');
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
@@ -219,6 +224,7 @@ export default function OfferPage() {
   const [pricingOptions, setPricingOptions] = useState<PricingOption[]>([]);
   const [productImages, setProductImages] = useState<string[]>([]);
   const [currency, setCurrency] = useState<string>('USD');
+  const [availableVariants, setAvailableVariants] = useState<ProductVariant[]>([]);
 
   // Track offer page view as step 25 (after prediction)
   usePageTracking(25);
@@ -239,39 +245,60 @@ export default function OfferPage() {
           const variantCurrency = firstVariant.price_currency || 'USD';
           setCurrency(variantCurrency);
           
-          // Transform variants into pricing options
-          const transformedOptions = data.product.variants.map((variant: ProductVariant, index: number) => {
-            const price = parseFloat(variant.price);
-            const comparePrice = variant.compare_at_price ? parseFloat(variant.compare_at_price) : price;
-            const savings = comparePrice - price;
-            const variantCurrencyCode = variant.price_currency || variantCurrency;
-            
-            // Map variant titles to supply labels and calculate pricing
-            const supplyConfig: Record<string, { label: string; bottles: number; days: number }> = {
-              'Glow Up': { label: '2 Bottles - 1 Month Supply', bottles: 2, days: 30 },
-              'Sun Kissed': { label: '4 Bottles - 2 Month Supply', bottles: 4, days: 60 },
-              'Golden Goddess': { label: '6 Bottles - 3 Month Supply', bottles: 6, days: 90 }
-            };
-            
-            const config = supplyConfig[variant.title] || { label: variant.title, bottles: 1, days: 30 };
-            
-            return {
-              id: variant.id.toString(),
-              name: variant.title,
-              supplyLabel: config.label,
-              regularPrice: comparePrice,
-              salePrice: price,
-              oneTimePrice: price, // For GlowDrop, same as sale price
-              savings: savings,
-              perBottle: price / config.bottles,
-              perDay: price / config.days,
-              popular: index === 1, // Middle option is popular
-              label: index === 2 ? 'BEST VALUE' : index === 1 ? 'MOST POPULAR' : null,
-              variantId: variant.id.toString(),
+          // Set available variants for color selection
+          setAvailableVariants(data.product.variants);
+
+          // Set default selected variant to first variant
+          if (data.product.variants.length > 0) {
+            setSelectedVariant(data.product.variants[0].id.toString());
+          }
+
+          // Create bundle pricing options with new structure
+          const bundleOptions = [
+            {
+              id: 'buy-2',
+              name: 'Buy 2',
+              supplyLabel: 'Buy 2 = 1 Free (3 total)',
+              regularPrice: 120,
+              salePrice: 80,
+              oneTimePrice: 80,
+              savings: 40,
+              perBottle: 26.67,
+              perDay: 2.67,
+              popular: false,
+              label: null,
+              variantId: data.product.variants[0]?.id.toString() || '',
               image: data.product.images[0]?.src || '',
-              currency: variantCurrencyCode
-            };
-          });
+              currency: variantCurrency,
+              quantity: 2,
+              freeItems: [{ name: 'Exclusive Habit Tracker Card', image: 'https://assets.replocdn.com/projects/149a24dc-b65a-423d-a51b-0d10fafbd16f/1c76d339-a4cd-4aed-8770-25b0a31851f6?width=96', count: 1 }],
+              totalItems: 3
+            },
+            {
+              id: 'buy-3',
+              name: 'Buy 3',
+              supplyLabel: 'Buy 3 = 2 Free (5 total)',
+              regularPrice: 200,
+              salePrice: 120,
+              oneTimePrice: 120,
+              savings: 80,
+              perBottle: 24,
+              perDay: 2.4,
+              popular: true,
+              label: 'MOST POPULAR',
+              variantId: data.product.variants[0]?.id.toString() || '',
+              image: data.product.images[0]?.src || '',
+              currency: variantCurrency,
+              quantity: 3,
+              freeItems: [
+                { name: 'Free Extra Bottle', image: 'https://glowdrop.co/cdn/shop/files/glowdrop-product-1.webp?v=1760196168&width=96', count: 1 },
+                { name: 'Free GlowDrop Water Bottle', image: 'https://assets.replocdn.com/projects/149a24dc-b65a-423d-a51b-0d10fafbd16f/24d97c7e-5138-418e-8063-60bfa0d29475?width=96', count: 1 }
+              ],
+              totalItems: 5
+            }
+          ];
+
+          const transformedOptions = bundleOptions;
           
           setPricingOptions(transformedOptions);
           
@@ -281,7 +308,7 @@ export default function OfferPage() {
             .map((img: ProductImage) => img.src);
           setProductImages(sortedImages);
           
-          // Set default selected plan to first variant
+          // Set default selected plan to first bundle option
           if (transformedOptions.length > 0) {
             setSelectedPlan(transformedOptions[0].id);
           }
@@ -298,19 +325,22 @@ export default function OfferPage() {
 
   const selectedOption = pricingOptions.find(opt => opt.id === selectedPlan) || pricingOptions[0];
 
-  // Subscribe & Save - uses selling plan, goes directly to checkout
+  // Bundle purchase with selected variant
   const handleAddToCart = () => {
+    if (!selectedOption || !selectedVariant) return;
+
     setIsAddingToCart(true);
 
     // Track purchase attempt
-    trackButtonClick(25, 'Add to Cart - Subscribe', {
+    trackButtonClick(25, 'Add to Cart - Bundle', {
       plan: selectedOption.id,
+      variant: selectedVariant,
       price: selectedOption.salePrice,
-      type: 'subscription'
+      type: 'bundle'
     });
 
-    // Add to cart for GlowDrop
-    const checkoutUrl = `https://glowdrop.co/cart/add?id=${selectedOption.variantId}&quantity=1&properties[Source]=Quiz&return_to=/checkout`;
+    // Add to cart with selected variant and quantity
+    const checkoutUrl = `https://glowdrop.co/cart/add?id=${selectedVariant}&quantity=${selectedOption.quantity}&properties[Source]=Quiz&properties[Bundle]=${selectedOption.name}&return_to=/checkout`;
 
     window.location.href = checkoutUrl;
   };
@@ -541,81 +571,153 @@ export default function OfferPage() {
           </p>
         </div>
 
-        {/* Pricing Section */}
-        <div id="offer-selection" className="mb-8 rounded-xl" style={{ backgroundColor: '#FFFFFF', border: '2px solid #E0D1D5', padding: '24px' }}>
+        {/* Color Selection */}
+        <div className="mb-8 rounded-xl" style={{ backgroundColor: '#FFFFFF', border: '2px solid #E0D1D5', padding: '24px' }}>
           <h3 className="text-lg font-bold mb-4" style={headingStyle}>
-            Size
+            Select Color
           </h3>
 
-          {/* Pricing Options - New Design with Images */}
+          <div className="space-y-3 mb-6">
+            {availableVariants.map((variant) => (
+              <div
+                key={variant.id}
+                onClick={() => {
+                  setSelectedVariant(variant.id.toString());
+                  trackAnswerSelect(25, variant.option1, 'Which color do you prefer?');
+                }}
+                className="relative rounded-lg cursor-pointer transition-all"
+                style={{
+                  backgroundColor: '#fff',
+                  border: selectedVariant === variant.id.toString() ? '2px solid #7A1E3A' : '1.5px solid #E0D1D5',
+                  padding: '16px'
+                }}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="w-6 h-6 rounded-full border-2" style={{
+                    backgroundColor: variant.option1?.toLowerCase() === 'tropical' ? '#FFB347' :
+                                   variant.option1?.toLowerCase() === 'golden' ? '#FFD700' :
+                                   variant.option1?.toLowerCase() === 'bronze' ? '#CD7F32' : '#E0D1D5',
+                    borderColor: selectedVariant === variant.id.toString() ? '#7A1E3A' : '#E0D1D5'
+                  }}></div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-base" style={textStyle}>{variant.option1}</h4>
+                  </div>
+                  {selectedVariant === variant.id.toString() && (
+                    <Check size={20} color="#7A1E3A" />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Quantity Selection */}
+        <div id="offer-selection" className="mb-8 rounded-xl" style={{ backgroundColor: '#FFFFFF', border: '2px solid #E0D1D5', padding: '24px' }}>
+          <h3 className="text-lg font-bold mb-4" style={headingStyle}>
+            Select Quantity
+          </h3>
+
+          {/* Bundle Options with Free Items */}
           {isLoading ? (
             <div className="text-center py-8">
-              <p style={textStyle}>Loading pricing options...</p>
+              <p style={textStyle}>Loading bundle options...</p>
             </div>
           ) : (
-          <div className="space-y-3 mb-6">
+          <div className="space-y-4 mb-6">
             {pricingOptions.map((option) => (
               <div
                 key={option.id}
                 onClick={() => {
-                  trackAnswerSelect(25, option.name, 'Which plan do you prefer?');
+                  trackAnswerSelect(25, option.name, 'Which bundle do you prefer?');
                   setSelectedPlan(option.id);
                 }}
                 className="relative rounded-lg cursor-pointer transition-all"
                 style={{
                   backgroundColor: '#fff',
                   border: selectedPlan === option.id ? '2px solid #7A1E3A' : '1.5px solid #E0D1D5',
-                  padding: '16px'
+                  padding: '20px'
                 }}
               >
                 {option.label && (
-                  <div 
-                    className="absolute -top-2.5 left-16 px-2.5 py-0.5 rounded text-[10px] font-bold uppercase"
+                  <div
+                    className="absolute -top-2.5 left-6 px-3 py-1 rounded text-xs font-bold uppercase"
                     style={{ backgroundColor: '#7A1E3A', color: '#FFFFFF' }}
                   >
                     {option.label}
                   </div>
                 )}
-                <div className="flex items-center gap-4">
-                  {/* Product Image */}
-                  <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0" style={{ backgroundColor: '#f5f5f5' }}>
-                    {productImages.length > 0 && (
-                      <img 
-                        src={option.image || productImages[0]} 
-                        alt={option.name}
-                        className="w-full h-full object-contain"
-                        onError={(e) => { if (productImages.length > 0) e.currentTarget.src = productImages[0]; }}
-                      />
-                    )}
+
+                <div className="flex items-start gap-4">
+                  {/* Main Product */}
+                  <div className="flex items-center gap-3">
+                    <div className="w-16 h-16 rounded-lg overflow-hidden shrink-0" style={{ backgroundColor: '#f5f5f5' }}>
+                      {productImages.length > 0 && (
+                        <img
+                          src={option.image || productImages[0]}
+                          alt="GlowDrop Tanning Drops"
+                          className="w-full h-full object-contain"
+                          onError={(e) => { if (productImages.length > 0) e.currentTarget.src = productImages[0]; }}
+                        />
+                      )}
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold" style={textStyle}>×{option.quantity} GlowDrop Bottles</div>
+                    </div>
                   </div>
-                  
-                  {/* Details */}
-                  <div className="flex-1">
-                    <h4 className="font-bold text-base mb-0.5" style={textStyle}>{option.name}</h4>
-                    <p className="text-xs text-gray-600">{option.supplyLabel}</p>
-                  </div>
-                  
+
+                  {/* Plus icon and free items */}
+                  {option.freeItems && option.freeItems.length > 0 && (
+                    <>
+                      <div className="text-2xl font-bold" style={{ color: '#7A1E3A' }}>+</div>
+                      <div className="flex flex-col gap-2">
+                        {option.freeItems.map((freeItem, index) => (
+                          <div key={index} className="flex items-center gap-2">
+                            <div className="w-12 h-12 rounded-lg overflow-hidden shrink-0" style={{ backgroundColor: '#f5f5f5' }}>
+                              <img
+                                src={freeItem.image}
+                                alt={freeItem.name}
+                                className="w-full h-full object-contain"
+                              />
+                            </div>
+                            <div>
+                              <div className="text-xs font-semibold text-green-600">FREE</div>
+                              <div className="text-xs" style={textStyle}>{freeItem.name}</div>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </>
+                  )}
+
                   {/* Price */}
-                  <div className="text-right">
-                    <span className="text-xl font-bold" style={textStyle}>
+                  <div className="ml-auto text-right">
+                    <div className="text-xl font-bold" style={textStyle}>
                       {formatCurrency(option.salePrice, option.currency)}
-                    </span>
-                    <br />
-                    <span className="text-sm line-through text-gray-400">
+                    </div>
+                    <div className="text-sm line-through text-gray-400">
                       {formatCurrency(option.regularPrice, option.currency)}
-                    </span>
+                    </div>
+                    <div className="text-xs font-semibold" style={{ color: '#7A1E3A' }}>
+                      Save {formatCurrency(option.savings, option.currency)}
+                    </div>
                   </div>
+                </div>
+
+                {/* Bundle description */}
+                <div className="mt-3 pt-3 border-t" style={{ borderColor: '#E0D1D5' }}>
+                  <div className="text-sm font-bold mb-1" style={textStyle}>{option.supplyLabel}</div>
+                  <div className="text-xs text-gray-600">Total items: {option.totalItems}</div>
                 </div>
               </div>
             ))}
           </div>
           )}
 
-          {/* Add to Cart Button - Subscribe & Save */}
-          {selectedOption && (
+          {/* Add to Cart Button - Bundle Purchase */}
+          {selectedOption && selectedVariant && (
             <button
               onClick={handleAddToCart}
-              disabled={isAddingToCart}
+              disabled={isAddingToCart || !selectedVariant}
               className="cta-button mb-4"
               style={buttonStyle}
             >
