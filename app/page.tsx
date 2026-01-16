@@ -556,6 +556,14 @@ export default function GlowDropQuizApp() {
           <h2 className="text-2xl font-bold mb-6" style={headingStyle}>86,000+ Women Have Already Made The Switch</h2>
           <p className="text-lg mb-6" style={textStyle}>From streaky self-tanners to effortless, year-round glow</p>
 
+          <div className="mb-6">
+            <img
+              src="https://glowdrop.co/cdn/shop/files/review-006_a200a839-8efb-4926-b2ff-dd6a8ece3993.png?v=1763070923&width=1420"
+              alt="Customer testimonial"
+              className="w-full max-w-md mx-auto rounded-lg"
+            />
+          </div>
+
           {/* Real testimonial */}
           <div className="mb-6 p-6 rounded-xl" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
             <div className="flex justify-center mb-3">
@@ -703,6 +711,14 @@ export default function GlowDropQuizApp() {
       <QuizLayout progress={75} fixedButton={continueButton}>
         <div className="text-center py-4 md:py-8 animate-fade-in">
           <h2 className="text-2xl font-bold mb-6" style={headingStyle}>What If You Could Just... Drink Your Tan?</h2>
+
+          <div className="mb-6">
+            <img
+              src="https://glowdrop.co/cdn/shop/files/gd-how-to-003-gif.webp?v=1763077134&width=1070"
+              alt="How to use GlowDrop"
+              className="w-full max-w-md mx-auto rounded-lg"
+            />
+          </div>
 
           <p className="text-lg mb-6" style={textStyle}>Sounds crazy, right? But here's the science:</p>
 
@@ -930,6 +946,15 @@ export default function GlowDropQuizApp() {
             <h2 className="text-xl font-bold text-center mb-6" style={headingStyle}>
               Are you ready to ditch streaky self-tanners, skip the UV damage, and wake up glowing every day?
             </h2>
+
+            <div className="mb-6">
+              <img
+                src="https://glowdrop.co/cdn/shop/files/review-001.png?v=1763067958&width=1420"
+                alt="Customer before and after"
+                className="w-full max-w-sm mx-auto rounded-lg"
+              />
+            </div>
+
             <p className="text-center mb-6 text-sm italic" style={textStyle}>
               86,000+ women already have.
             </p>
