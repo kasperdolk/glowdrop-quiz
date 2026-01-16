@@ -151,7 +151,7 @@ const Dashboard = () => {
 
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F9F7F5FF' }}>
         <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
           <h1 className="text-2xl font-bold mb-6 text-center">Analytics Dashboard</h1>
           <form onSubmit={handleLogin}>
@@ -186,7 +186,7 @@ const Dashboard = () => {
 
   if (!data && loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#F9F7F5FF' }}>
         <div className="text-center">
           <RefreshCw className="animate-spin mx-auto mb-4" size={48} />
           <p className="text-gray-600">Loading analytics data...</p>
@@ -196,7 +196,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen" style={{ backgroundColor: '#F9F7F5FF' }}>
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 py-4">

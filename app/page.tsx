@@ -582,6 +582,403 @@ export default function GlowDropQuizApp() {
     );
   }
 
+  // 9. Question 6: Dream Scenario
+  if (step === STEPS.DREAM_SCENARIO) {
+    return (
+      <QuizLayout progress={60}>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>Imagine waking up with a natural, golden glow. No streaks. No smell. No effort. How would that feel?</h2>
+        <div className="space-y-3">
+          {[
+            '🔥 Like a weight off my shoulders',
+            '😍 Confident enough to wear whatever I want',
+            '✨ Like I\'ve been waiting my whole life for this'
+          ].map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                selectAnswer('dreamScenario', option, false);
+                handleOptionClick(option, STEPS.CONFIDENCE_IMPACT, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
+              style={multipleChoiceButtonStyle}
+            >
+              <span>{option}</span>
+              {isSelected(option) && (
+                <CheckCircle
+                  size={20}
+                  color="#562935"
+                  className="checkmark-animate"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </QuizLayout>
+    );
+  }
+
+  // 10. Question 7: Confidence Impact
+  if (step === STEPS.CONFIDENCE_IMPACT) {
+    return (
+      <QuizLayout progress={65}>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>Has not having a tan ever stopped you from...</h2>
+        <div className="space-y-3">
+          {[
+            '👗 Wearing certain clothes (shorts, dresses, swimsuits)',
+            '📸 Feeling confident in photos',
+            '🏖️ Enjoying beach days or pool parties',
+            '😔 Feeling as attractive as I want to feel',
+            '🙅 None of these'
+          ].map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                selectAnswer('confidenceImpact', option, false);
+                handleOptionClick(option, STEPS.WHAT_MATTERS_MOST, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
+              style={multipleChoiceButtonStyle}
+            >
+              <span>{option}</span>
+              {isSelected(option) && (
+                <CheckCircle
+                  size={20}
+                  color="#562935"
+                  className="checkmark-animate"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </QuizLayout>
+    );
+  }
+
+  // 11. Question 8: What Matters Most
+  if (step === STEPS.WHAT_MATTERS_MOST) {
+    return (
+      <QuizLayout progress={70}>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>In a tanning solution, what matters most to you?</h2>
+        <div className="space-y-3">
+          {[
+            '🌿 Safe ingredients (no UV, no harsh chemicals)',
+            '⚡ Speed and convenience',
+            '✨ Natural-looking results (not orange)',
+            '🧴 Skincare benefits too',
+            '💰 Actually worth the money'
+          ].map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                selectAnswer('whatMattersMost', option, false);
+                handleOptionClick(option, STEPS.INTERSTITIAL_3, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
+              style={multipleChoiceButtonStyle}
+            >
+              <span>{option}</span>
+              {isSelected(option) && (
+                <CheckCircle
+                  size={20}
+                  color="#562935"
+                  className="checkmark-animate"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </QuizLayout>
+    );
+  }
+
+  // 12. Interstitial 3: The Solution Tease
+  if (step === STEPS.INTERSTITIAL_3) {
+    const continueButton = (
+      <button onClick={() => setStep(STEPS.UPCOMING_MOTIVATION)} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
+        Show Me How <ArrowRight size={24} color="#FFFFFF" />
+      </button>
+    );
+
+    return (
+      <QuizLayout progress={75} fixedButton={continueButton}>
+        <div className="text-center py-4 md:py-8 animate-fade-in">
+          <h2 className="text-2xl font-bold mb-6" style={headingStyle}>What If You Could Just... Drink Your Tan?</h2>
+
+          <p className="text-lg mb-6" style={textStyle}>Sounds crazy, right? But here's the science:</p>
+
+          <div className="text-left mb-6 p-4 rounded-xl" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
+            <p className="mb-4" style={textStyle}>
+              Your skin's golden color comes from <strong>melanin</strong>—a pigment your body makes naturally.
+            </p>
+            <p className="mb-4" style={textStyle}>
+              Certain vitamins and amino acids (like <strong>Beta-Carotene</strong> and <strong>L-Tyrosine</strong>) support your body's melanin production from within.
+            </p>
+            <p className="mb-4" style={textStyle}>
+              The result? A gradual, natural-looking tan that:
+            </p>
+            <ul className="space-y-2 text-sm mb-4" style={textStyle}>
+              <li>• Doesn't streak or stain</li>
+              <li>• Doesn't smell weird</li>
+              <li>• Requires ZERO UV exposure</li>
+              <li>• Takes 5 seconds a day</li>
+            </ul>
+            <p className="font-bold text-center" style={textStyle}>
+              This is exactly what GlowDrop does.
+            </p>
+          </div>
+        </div>
+      </QuizLayout>
+    );
+  }
+
+  // 13. Question 9: Upcoming Motivation
+  if (step === STEPS.UPCOMING_MOTIVATION) {
+    return (
+      <QuizLayout progress={80}>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>Do you have anything coming up where you'd love to look your best?</h2>
+        <div className="space-y-3">
+          {[
+            '👰 Wedding or special event',
+            '🏖️ Vacation or beach trip',
+            '🌸 Summer is coming',
+            '🔄 I just want to look good year-round'
+          ].map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                selectAnswer('upcomingMotivation', option, false);
+                handleOptionClick(option, STEPS.COMMITMENT_CHECK, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
+              style={multipleChoiceButtonStyle}
+            >
+              <span>{option}</span>
+              {isSelected(option) && (
+                <CheckCircle
+                  size={20}
+                  color="#562935"
+                  className="checkmark-animate"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </QuizLayout>
+    );
+  }
+
+  // 14. Question 10: Commitment Check
+  if (step === STEPS.COMMITMENT_CHECK) {
+    return (
+      <QuizLayout progress={85}>
+        <h2 className="text-2xl font-bold text-center mb-6" style={headingStyle}>If there was a 5-second daily routine that gave you a natural glow without UV damage or messy self-tanners... would you try it?</h2>
+        <div className="space-y-3">
+          {[
+            '✅ Yes, I\'ve been waiting for this',
+            '🤔 Maybe, if it actually works',
+            '💸 Depends on the price'
+          ].map((option) => (
+            <button
+              key={option}
+              onClick={() => {
+                selectAnswer('commitmentCheck', option, false);
+                handleOptionClick(option, STEPS.INTERSTITIAL_4, false);
+              }}
+              className={`w-full transition-all flex items-center justify-between quiz-option ${isSelected(option) ? 'selected' : ''}`}
+              style={multipleChoiceButtonStyle}
+            >
+              <span>{option}</span>
+              {isSelected(option) && (
+                <CheckCircle
+                  size={20}
+                  color="#562935"
+                  className="checkmark-animate"
+                />
+              )}
+            </button>
+          ))}
+        </div>
+      </QuizLayout>
+    );
+  }
+
+  // 15. Interstitial 4: How It Works
+  if (step === STEPS.INTERSTITIAL_4) {
+    const continueButton = (
+      <button onClick={() => handleGlowAssessment(STEPS.RESULTS)} className="w-full flex items-center justify-center gap-3 cta-button" style={buttonStyle}>
+        See My Results <ArrowRight size={24} color="#FFFFFF" />
+      </button>
+    );
+
+    return (
+      <QuizLayout progress={90} fixedButton={continueButton}>
+        <div className="text-center py-4 md:py-8 animate-fade-in">
+          <h2 className="text-2xl font-bold mb-6" style={headingStyle}>Why GlowDrop Works When Everything Else Failed</h2>
+
+          {/* Comparison Table */}
+          <div className="mb-6">
+            <div className="grid grid-cols-1 gap-4 mb-4">
+              <div className="p-4 rounded-xl" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444' }}>
+                <h3 className="font-bold mb-2 text-red-600">☀️ Sun Tanning</h3>
+                <p className="text-sm" style={textStyle}>Burns, ages skin, cancer risk</p>
+              </div>
+              <div className="p-4 rounded-xl" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444' }}>
+                <h3 className="font-bold mb-2 text-red-600">🧴 Self-Tanners</h3>
+                <p className="text-sm" style={textStyle}>Streaks, smells, stains, 30+ min</p>
+              </div>
+              <div className="p-4 rounded-xl" style={{ backgroundColor: 'rgba(239, 68, 68, 0.1)', border: '1px solid #ef4444' }}>
+                <h3 className="font-bold mb-2 text-red-600">💨 Spray Tans</h3>
+                <p className="text-sm" style={textStyle}>$50+/week, fades in days</p>
+              </div>
+            </div>
+
+            <div className="p-6 rounded-xl" style={{ backgroundColor: '#FFF4FD', border: '2px solid #7A1E3A' }}>
+              <h3 className="font-bold mb-4 text-center" style={headingStyle}>Why GlowDrop Is Different:</h3>
+              <div className="space-y-3 text-left">
+                <div className="flex items-start gap-3">
+                  <CheckCircle size={20} color="#7A1E3A" className="shrink-0 mt-1" />
+                  <span className="text-sm" style={textStyle}><strong>Works from within</strong> — Natural melanin, not painted-on color</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle size={20} color="#7A1E3A" className="shrink-0 mt-1" />
+                  <span className="text-sm" style={textStyle}><strong>5 seconds daily</strong> — Add drops to any drink</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle size={20} color="#7A1E3A" className="shrink-0 mt-1" />
+                  <span className="text-sm" style={textStyle}><strong>No mess</strong> — Nothing touches your skin</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle size={20} color="#7A1E3A" className="shrink-0 mt-1" />
+                  <span className="text-sm" style={textStyle}><strong>Skincare benefits</strong> — Hyaluronic Acid & Collagen</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <CheckCircle size={20} color="#7A1E3A" className="shrink-0 mt-1" />
+                  <span className="text-sm" style={textStyle}><strong>Safe</strong> — Dermatologist-tested ingredients</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </QuizLayout>
+    );
+  }
+
+  // 16. Results Screen
+  if (step === STEPS.RESULTS) {
+    if (loading) return <InterstitialLoading text={loadingMessage || "Creating your personalized glow assessment..."} />;
+
+    const continueButton = (
+      <button onClick={() => setStep(STEPS.FINAL_COMMITMENT)} className="w-full flex items-center justify-center gap-3 cta-button cta-button-pulse" style={buttonStyle}>
+        GET MY PERSONALIZED GLOW PLAN <ArrowRight size={24} color="#FFFFFF" />
+      </button>
+    );
+
+    return (
+      <QuizLayout progress={95} fixedButton={continueButton}>
+        <div className="text-center mb-4">
+          <span
+            className="inline-block px-3 py-1 rounded-full text-xs font-bold mb-3"
+            style={{
+              backgroundColor: '#FFF4FD',
+              border: '1px solid #E0D1D5',
+              color: '#562935'
+            }}
+          >
+            ✨ YOUR PERSONALIZED GLOW ASSESSMENT
+          </span>
+          <h2 className="text-xl font-bold" style={headingStyle}>
+            Your Glow Potential: HIGH ✨
+          </h2>
+          <p className="text-sm mt-2" style={textStyle}>Here's what to expect with GlowDrop:</p>
+        </div>
+
+        {/* Timeline */}
+        <div className="space-y-3 mb-6">
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
+            <h4 className="font-bold mb-1" style={textStyle}>Week 1-2:</h4>
+            <p className="text-sm" style={textStyle}>Subtle healthy undertone develops</p>
+          </div>
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
+            <h4 className="font-bold mb-1" style={textStyle}>Week 2-3:</h4>
+            <p className="text-sm" style={textStyle}>Friends start asking "Did you go somewhere?"</p>
+          </div>
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
+            <h4 className="font-bold mb-1" style={textStyle}>Week 4-6:</h4>
+            <p className="text-sm" style={textStyle}>Full sun-kissed glow achieved</p>
+          </div>
+          <div className="p-4 rounded-lg" style={{ backgroundColor: '#FFF4FD', border: '1px solid #E0D1D5' }}>
+            <h4 className="font-bold mb-1" style={textStyle}>Ongoing:</h4>
+            <p className="text-sm" style={textStyle}>Maintain year-round. Never touch a self-tanner again.</p>
+          </div>
+        </div>
+
+        {/* Recommendation */}
+        <div className="p-6 rounded-xl mb-4" style={{ backgroundColor: '#fff', border: '2px solid #7A1E3A' }}>
+          <h3 className="font-bold mb-2 text-center" style={headingStyle}>Recommended For You:</h3>
+          <p className="text-center font-semibold" style={textStyle}>GlowDrop Tanning Drops — 3 Month Supply</p>
+        </div>
+      </QuizLayout>
+    );
+  }
+
+  // 17. Final Commitment Modal
+  if (step === STEPS.FINAL_COMMITMENT) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center" style={{ backgroundColor: '#F9F7F5FF' }}>
+        <div className="w-full max-w-md px-4">
+          <div className="p-8 rounded-xl animate-fade-in" style={{ backgroundColor: '#fff', border: '2px solid #E0D1D5' }}>
+            <h2 className="text-xl font-bold text-center mb-6" style={headingStyle}>
+              Are you ready to ditch streaky self-tanners, skip the UV damage, and wake up glowing every day?
+            </h2>
+            <p className="text-center mb-6 text-sm italic" style={textStyle}>
+              86,000+ women already have.
+            </p>
+            <div className="space-y-3">
+              <button
+                onClick={() => setStep(STEPS.OFFER_LOADING)}
+                className="w-full py-4 rounded-lg font-bold transition-all"
+                style={{
+                  backgroundColor: '#7A1E3A',
+                  border: 'none',
+                  borderRadius: '9999px',
+                  color: '#FFFFFF',
+                  fontFamily: 'Inter',
+                  cursor: 'pointer'
+                }}
+              >
+                Yes, Show Me GlowDrop →
+              </button>
+              <button
+                onClick={() => window.location.href = '/'}
+                className="w-full py-3 rounded-lg font-medium transition-all text-sm"
+                style={{
+                  backgroundColor: 'transparent',
+                  border: '1px solid #E0D1D5',
+                  color: '#562935',
+                  fontFamily: 'Inter',
+                  cursor: 'pointer'
+                }}
+              >
+                No, I'll stick with what I'm doing
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 18. Offer Loading Screen
+  if (step === STEPS.OFFER_LOADING) {
+    return <OfferLoadingScreen />;
+  }
+
+  // 19. Prediction - Redirects to offer
+  if (step === STEPS.PREDICTION) {
+    window.location.href = '/offer';
+    return null;
+  }
+
   return <div>Unknown Step</div>;
 }
 
