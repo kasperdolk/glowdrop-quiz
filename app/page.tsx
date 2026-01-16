@@ -60,90 +60,36 @@ const headingStyle = {
   lineHeight: '150%'
 };
 
-// Health concern data for personalization
-const CONCERN_DATA: Record<string, {
-  shortName: string;
-  emoji: string;
-  symptom: string;
-  healthMarker: string;
-  markerStatus: string;
-  benefit: string;
-  futureState: string;
-  reviewMatch: string;
-  rootCause: string;
-  statPercent: number;
-}> = {
-  '🎈 Constant Bloating': {
-    shortName: 'Bloating',
-    emoji: '🎈',
-    symptom: 'uncomfortable bloating after meals',
-    healthMarker: 'Gut Inflammation',
-    markerStatus: 'High',
-    benefit: 'Eliminates bloating within 7 days',
-    futureState: 'Flat, comfortable stomach',
-    reviewMatch: 'bloating',
-    rootCause: 'parasites releasing toxins in your gut lining',
-    statPercent: 94
+// Glow data for personalization
+const GLOW_INSIGHTS = {
+  skinTypes: {
+    burns_first: {
+      label: 'Fair, Burns Easily',
+      glowPotential: 'HIGH',
+      timeline: '2-3 weeks for visible results'
+    },
+    slow_tan: {
+      label: 'Medium, Slow to Tan',
+      glowPotential: 'HIGH',
+      timeline: '3-4 weeks for full glow'
+    },
+    easy_tan: {
+      label: 'Medium-Dark, Tans Easily',
+      glowPotential: 'EXCELLENT',
+      timeline: '1-2 weeks for enhanced glow'
+    },
+    cant_tan: {
+      label: 'Very Fair, Cannot Tan',
+      glowPotential: 'PERFECT',
+      timeline: '2-4 weeks for safe, natural color'
+    }
   },
-  '😴 Low Energy / Fatigue': {
-    shortName: 'Fatigue',
-    emoji: '😴',
-    symptom: 'constant tiredness and brain fog',
-    healthMarker: 'Energy Production',
-    markerStatus: 'Depleted',
-    benefit: 'Restores natural energy levels',
-    futureState: 'Boundless daily energy',
-    reviewMatch: 'energy',
-    rootCause: 'parasites stealing nutrients and draining your energy',
-    statPercent: 91
-  },
-  '💓 High Blood Pressure': {
-    shortName: 'Blood Pressure',
-    emoji: '💓',
-    symptom: 'elevated blood pressure readings',
-    healthMarker: 'Cardiovascular Stress',
-    markerStatus: 'Elevated',
-    benefit: 'Supports healthy blood pressure naturally',
-    futureState: 'Balanced, healthy circulation',
-    reviewMatch: 'blood pressure',
-    rootCause: 'parasitic infection causing systemic inflammation',
-    statPercent: 89
-  },
-  '🛡️ Weak Immune System': {
-    shortName: 'Immunity',
-    emoji: '🛡️',
-    symptom: 'frequent colds and slow recovery',
-    healthMarker: 'Immune Efficiency',
-    markerStatus: 'Low',
-    benefit: 'Strengthens immune defense',
-    futureState: 'Robust immune protection',
-    reviewMatch: 'immune',
-    rootCause: 'parasites compromising your gut barrier and immune function',
-    statPercent: 92
-  },
-  '🦴 Joint Inflammation': {
-    shortName: 'Joint Pain',
-    emoji: '🦴',
-    symptom: 'stiff, achy joints',
-    healthMarker: 'Inflammation Markers',
-    markerStatus: 'Elevated',
-    benefit: 'Reduces joint inflammation',
-    futureState: 'Flexible, pain-free movement',
-    reviewMatch: 'joint',
-    rootCause: 'parasitic toxins triggering inflammatory response',
-    statPercent: 88
-  },
-  '🍽️ Poor Digestion': {
-    shortName: 'Digestion',
-    emoji: '🍽️',
-    symptom: 'irregular digestion and discomfort',
-    healthMarker: 'Digestive Function',
-    markerStatus: 'Impaired',
-    benefit: 'Optimizes digestive health',
-    futureState: 'Perfect digestive balance',
-    reviewMatch: 'digestion',
-    rootCause: 'parasites disrupting your gut microbiome balance',
-    statPercent: 93
+  frustrations: {
+    streaks: 'Get even, natural-looking color without streaks or patches',
+    time: 'Achieve your glow in just 5 seconds daily',
+    uv_damage: 'Build color safely with zero UV exposure',
+    expensive: 'Maintain year-round glow for less than $2/day',
+    nothing_works: 'Finally find a solution that actually delivers results'
   }
 };
 
